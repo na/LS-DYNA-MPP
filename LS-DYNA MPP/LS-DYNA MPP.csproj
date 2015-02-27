@@ -7,7 +7,7 @@
     <ProjectGuid>{1FC2D466-A651-418F-95B9-94935E34440C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LS_DYNA_MPP</RootNamespace>
+    <RootNamespace>Predictive.LsDyna.Mpp</RootNamespace>
     <AssemblyName>LS-DYNA MPP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -15,7 +15,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -83,7 +83,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="IOService.cs" />
+    <Compile Include="RxProcessUtilities.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -103,8 +104,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MPPDYNA.cs" />
-    <Compile Include="MPPDYNAViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

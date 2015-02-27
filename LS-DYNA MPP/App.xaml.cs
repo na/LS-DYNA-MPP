@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace LS_DYNA_MPP
+namespace Predictive.Lsdyna.Mpp
 {
     /// <summary>
     /// Interaction logic for App.xaml

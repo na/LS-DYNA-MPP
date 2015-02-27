@@ -10,9 +10,9 @@ using System.Windows;
 [assembly: AssemblyTitle("LS-DYNA MPP")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyCompany("Predictive Engineering")]
 [assembly: AssemblyProduct("LS-DYNA MPP")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2015")]
+[assembly: AssemblyCopyright("Copyright © Predictive Engineering 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

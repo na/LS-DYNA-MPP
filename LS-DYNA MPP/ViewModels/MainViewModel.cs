@@ -6,63 +6,60 @@ using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.Reactive.Subjects;
 using ReactiveUI;
+using System.Diagnostics;
+using System.IO;
+using System.Reactive.Linq;
 
-namespace LS_DYNA_MPP.ViewModels
+namespace Predictive.Lsdyna.Mpp
 {
-    class MainViewModel : ReactiveObject
+    public class MainViewModel : ReactiveObject
     {
         public MainViewModel()
         {
-            var mppcommand = this.WhenAnyValue(x => x.Processors,
-                                            X => X.Solver,
+            var mppcommandArgs = this.WhenAnyValue(x => x.Processors,
+                                            x => x.Solver,
                                             x => x.InputFile, 
                                             x => x.OutputFile,
                                             x => x.ExtraCommands,
-                                            (Processors,  Solver, InputFile, OutputFile, ExtraCommands) => String.Format("mpiexec -np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
-                                            .ToProperty(this, x => x.mppCommand, out _mppCommand);
+                                            (Processors,  Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
+                                            .ToProperty(this, x => x.mppCommandArgs, out _mppCommandArgs);
 
-            var dlg = new OpenFileDialog();
+            var mppcommand = this.WhenAnyValue(
+                                x => x.MPI,
+                                x => x.mppCommandArgs,
+                                (MPI, Args) => String.Format("{0} {1}", MPI, Args))
+                                .ToProperty(this, x => x.mppCommand, out _mppCommand);
 
-            // Input file browse dialog
-            var inputFileDone = new Subject<string>();
+            this.WhenAnyValue(x => x.InputFile)
+                .Select(x => Path.GetDirectoryName(x))
+                .ToProperty(this, x => x.WorkingDir, out _workingDir);
+
             BrowseInputFile = ReactiveCommand.Create();
-            BrowseInputFile.Subscribe(_ =>
-              {
-                  var result = dlg.ShowDialog();
-                  inputFileDone.OnNext(dlg.FileName);
-              });
-            inputFileDone.Subscribe(x => InputFile = x);
-
-            // Output file browse dialog
             BrowseOutputFile = ReactiveCommand.Create();
-            var outputFileDone = new Subject<string>();
-            BrowseOutputFile.Subscribe(_ => 
-                {
-                    var result = dlg.ShowDialog();
-                    outputFileDone.OnNext(dlg.FileName);
-                });
-            outputFileDone.Subscribe(x => OutputFile = x);
-
-            // Solver browse dialog
             BrowseSolver = ReactiveCommand.Create();
-            var solverDone = new Subject<string>();
-            BrowseSolver.Subscribe(_ =>
-            {
-                var result = dlg.ShowDialog();
-                solverDone.OnNext(dlg.FileName);
-            });
-            solverDone.Subscribe(x => Solver = x);
+
+            var canRunMPP = this.WhenAny(
+                                x => x.InputFile, 
+                                x => x.OutputFile, 
+                                x => x.Solver, 
+                                x => x.Processors, 
+                                x => x.IsRunning,
+                                (i , o , s, p, r) => !String.IsNullOrWhiteSpace(i.Value) && !String.IsNullOrWhiteSpace(o.Value) && !String.IsNullOrWhiteSpace(s.Value) && p.Value>0 && !r.Value);
+            
+            Run = ReactiveCommand.Create(canRunMPP);
         }
 
         public ReactiveCommand<object> BrowseInputFile { get; protected set; }
         public ReactiveCommand<object> BrowseOutputFile { get; protected set; }
         public ReactiveCommand<object> BrowseSolver { get; protected set; }
+        public ReactiveCommand<object> Run { get; protected set; }
+        public ReactiveCommand<object> RunMPI { get; protected set; }
 
         private string _inputFile;
         public string InputFile
         {
             get { return _inputFile; }
-            set { this.RaiseAndSetIfChanged(ref _inputFile, value); }
+            set{ this.RaiseAndSetIfChanged(ref _inputFile, value); }
         }
 
         private string _outputFile;
@@ -107,11 +104,43 @@ namespace LS_DYNA_MPP.ViewModels
             set { this.RaiseAndSetIfChanged(ref _extraCommands, value); }
         }
 
+        private string _outputText;
+        public string OutputText
+        {
+            get { return _outputText; }
+            set { this.RaiseAndSetIfChanged(ref _outputText, value); }
+        }
+
+        private string _mpi;
+        public string MPI
+        {
+            get { return _mpi; }
+            set { this.RaiseAndSetIfChanged(ref _mpi, value); }
+        }
+
+        private bool _isRunning;
+        public bool IsRunning
+        {
+            get { return _isRunning; }
+            set { this.RaiseAndSetIfChanged(ref _isRunning, value); }
+        }
+
         ObservableAsPropertyHelper<string> _mppCommand;
         public string mppCommand
         {
             get { return _mppCommand.Value; }
         }
 
+        ObservableAsPropertyHelper<string> _mppCommandArgs;
+        public string mppCommandArgs
+        {
+            get { return _mppCommandArgs.Value; }
+        }
+
+        ObservableAsPropertyHelper<string> _workingDir;
+        public string WorkingDir
+        {
+            get { return _workingDir.Value; }
+        }
     }
 }
