@@ -9,6 +9,7 @@ using ReactiveUI;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
+using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
 {
@@ -18,10 +19,10 @@ namespace Predictive.Lsdyna.Mpp
         {
             var mppcommandArgs = this.WhenAnyValue(x => x.Processors,
                                             x => x.Solver,
-                                            x => x.InputFile, 
+                                            x => x.InputFile,
                                             x => x.OutputFile,
                                             x => x.ExtraCommands,
-                                            (Processors,  Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
+                                            (Processors, Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
                                             .ToProperty(this, x => x.mppCommandArgs, out _mppCommandArgs);
 
             var mppcommand = this.WhenAnyValue(
@@ -39,13 +40,12 @@ namespace Predictive.Lsdyna.Mpp
             BrowseSolver = ReactiveCommand.Create();
 
             var canRunMPP = this.WhenAny(
-                                x => x.InputFile, 
-                                x => x.OutputFile, 
-                                x => x.Solver, 
-                                x => x.Processors, 
-                                x => x.IsRunning,
-                                (i , o , s, p, r) => !String.IsNullOrWhiteSpace(i.Value) && !String.IsNullOrWhiteSpace(o.Value) && !String.IsNullOrWhiteSpace(s.Value) && p.Value>0 && !r.Value);
-            
+                                x => x.InputFile,
+                                x => x.OutputFile,
+                                x => x.Solver,
+                                x => x.Processors,
+                                (i, o, s, p) => !String.IsNullOrWhiteSpace(i.Value) && !String.IsNullOrWhiteSpace(o.Value) && !String.IsNullOrWhiteSpace(s.Value) && p.Value > 0);
+
             Run = ReactiveCommand.Create(canRunMPP);
         }
 
@@ -53,13 +53,14 @@ namespace Predictive.Lsdyna.Mpp
         public ReactiveCommand<object> BrowseOutputFile { get; protected set; }
         public ReactiveCommand<object> BrowseSolver { get; protected set; }
         public ReactiveCommand<object> Run { get; protected set; }
-        public ReactiveCommand<object> RunMPI { get; protected set; }
+        public ReactiveCommand<string> RunMPP { get; protected set; }
+        public ReactiveCommand<string> Stop { get; protected set; }
 
         private string _inputFile;
         public string InputFile
         {
             get { return _inputFile; }
-            set{ this.RaiseAndSetIfChanged(ref _inputFile, value); }
+            set { this.RaiseAndSetIfChanged(ref _inputFile, value); }
         }
 
         private string _outputFile;

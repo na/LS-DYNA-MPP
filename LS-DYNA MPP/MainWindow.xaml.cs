@@ -18,6 +18,8 @@ using MahApps.Metro.Controls;
 using ReactiveUI;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Reactive.Disposables;
+using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
 {
@@ -54,8 +56,8 @@ namespace Predictive.Lsdyna.Mpp
             ViewModel.MPI = FindMPI();
             ViewModel.Solver = Properties.Settings.Default["mppPath"].ToString();
             ViewModel.Processors = Environment.ProcessorCount;
-            ViewModel.IsRunning = false;
-
+            
+            // file dialogs 
             var dlg = new OpenFileDialog();
 
             // The following code wires up the OpenFileDialog boxes for the inputfile, outputfile and solver
@@ -106,14 +108,9 @@ namespace Predictive.Lsdyna.Mpp
                     solverFilePath.OnNext(dlg.FileName);
                 });
             solverFilePath.Subscribe(x => this.ViewModel.Solver = x);
-                                   
-            var proc = new ProgramHelper(this.ViewModel.MPI);
-            
-            this.WhenAnyObservable(x => x.ViewModel.Run)
-                .Subscribe(_ => StartCommand(proc));
 
-           //proc.ObservableOutput.Subscribe(LineOutputter);
-           //this.Bind(ViewModel, _ => proc.ObservableOutput, x => x.CommandOutput.Text);
+            this.WhenAnyObservable(x => x.ViewModel.Run)
+                .Subscribe(_ => StartCommand());
         }
 
         public MainViewModel ViewModel
@@ -141,38 +138,15 @@ namespace Predictive.Lsdyna.Mpp
             return path;
         }
 
-        private void StartCommand(ProgramHelper progHelper)
+        private void StartCommand()
         {
-            this.ViewModel.IsRunning = true;
-            progHelper.StartProgram(this.ViewModel.mppCommandArgs, this.ViewModel.WorkingDir);
+            var proc = new ProgramHelper(this.ViewModel.MPI);
+            proc.StartProgram(this.ViewModel.mppCommandArgs, this.ViewModel.WorkingDir);
         }
 
         private static void LineOutputter(string line)
         {
             Debug.Print(line);
-        }
-
-        private static IEnumerable<string> GetLineReader(StreamReader reader)
-        {
-            while (reader.BaseStream.CanRead)
-            {
-                var l = reader.ReadLine();
-                if (l == null)
-                {
-                    break;
-                }
-                yield return l;
-            }
-        }
-    }
-
-    public static class ProcessExtension
-    {
-        public static IObservable<string> StandardOutputObservable(this System.Diagnostics.Process @this)
-        {
-            return Observable
-              .FromEventPattern<DataReceivedEventHandler, DataReceivedEventArgs>(h => @this.OutputDataReceived += h, h => @this.OutputDataReceived -= h)
-              .Select(x => x.EventArgs.Data);
         }
     }
 
@@ -184,7 +158,6 @@ namespace Predictive.Lsdyna.Mpp
         public ProgramHelper(string programPath)
         {
             _program.StartInfo.FileName = programPath;
-            //_program.StartInfo.WorkingDirectory = "C:\\scratch\\mppdyna";
             _program.EnableRaisingEvents = true;
             _program.StartInfo.UseShellExecute = true;
             _program.StartInfo.RedirectStandardOutput = false;

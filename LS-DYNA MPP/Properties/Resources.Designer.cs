@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Predictive.LsDyna.Mpp.Properties {
+namespace Predictive.Lsdyna.Mpp.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Predictive.LsDyna.Mpp.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Predictive.LsDyna.Mpp.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Predictive.Lsdyna.Mpp.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

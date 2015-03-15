@@ -111,8 +111,8 @@
                 <ColumnDefinition Width="Auto" SharedSizeGroup="buttons"/>
             </Grid.ColumnDefinitions>
             <Button x:Name="RunButton" 
-                    IsEnabled="{Binding canRunMPP}"
                     Content="Run" 
+                    Command="{Binding RunMPP}"
                     Padding="14,3,14,6" 
                     Margin="6,6,20,20"
                     Style="{DynamicResource AccentedSquareButtonStyle}" FontSize="20"/>
@@ -120,6 +120,7 @@
                     Content="Stop" 
                     IsEnabled="False"
                     Grid.Column="1" 
+                    Command="{Binding Stop}"
                     Padding="14,3,14,6" 
                     Margin="6,6,20,20"
                     Style="{DynamicResource SquareButtonStyle}" FontSize="20"/>
