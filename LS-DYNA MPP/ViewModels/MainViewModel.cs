@@ -39,6 +39,7 @@ namespace Predictive.Lsdyna.Mpp
             BrowseOutputFile = ReactiveCommand.Create();
             BrowseSolver = ReactiveCommand.Create();
 
+
             var canRunMPP = this.WhenAny(
                                 x => x.InputFile,
                                 x => x.OutputFile,
@@ -47,6 +48,15 @@ namespace Predictive.Lsdyna.Mpp
                                 (i, o, s, p) => !String.IsNullOrWhiteSpace(i.Value) && !String.IsNullOrWhiteSpace(o.Value) && !String.IsNullOrWhiteSpace(s.Value) && p.Value > 0);
 
             Run = ReactiveCommand.Create(canRunMPP);
+
+            SWRestartStop = ReactiveCommand.Create(canRunMPP);
+            SWRestartContinue = ReactiveCommand.Create(canRunMPP);
+            SWRezonerToggle = ReactiveCommand.Create(canRunMPP);
+            SWTimeAndCycle = ReactiveCommand.Create(canRunMPP);
+            SWVisToggle = ReactiveCommand.Create(canRunMPP);
+            SWPlotState = ReactiveCommand.Create(canRunMPP);
+            SWASCIIFlush = ReactiveCommand.Create(canRunMPP);
+
         }
 
         public ReactiveCommand<object> BrowseInputFile { get; protected set; }
@@ -54,7 +64,13 @@ namespace Predictive.Lsdyna.Mpp
         public ReactiveCommand<object> BrowseSolver { get; protected set; }
         public ReactiveCommand<object> Run { get; protected set; }
         public ReactiveCommand<string> RunMPP { get; protected set; }
-        public ReactiveCommand<string> Stop { get; protected set; }
+        public ReactiveCommand<object> SWRestartStop { get; protected set; }
+        public ReactiveCommand<object> SWRestartContinue { get; protected set; }
+        public ReactiveCommand<object> SWTimeAndCycle { get; protected set; }
+        public ReactiveCommand<object> SWPlotState { get; protected set; }
+        public ReactiveCommand<object> SWVisToggle { get; protected set; }
+        public ReactiveCommand<object> SWRezonerToggle { get; protected set; }
+        public ReactiveCommand<object> SWASCIIFlush { get; protected set; }
 
         private string _inputFile;
         public string InputFile

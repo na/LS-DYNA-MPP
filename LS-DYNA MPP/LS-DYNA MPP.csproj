@@ -7,7 +7,7 @@
     <ProjectGuid>{1FC2D466-A651-418F-95B9-94935E34440C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Predictive.LsDyna.Mpp</RootNamespace>
+    <RootNamespace>Predictive.Lsdyna.Mpp</RootNamespace>
     <AssemblyName>LS-DYNA MPP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -83,6 +83,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Interfaces.cs" />
     <Compile Include="ProcessExtensions.cs" />
     <Compile Include="RxProcessUtilities.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />

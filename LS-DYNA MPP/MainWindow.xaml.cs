@@ -51,6 +51,13 @@ namespace Predictive.Lsdyna.Mpp
             this.BindCommand(ViewModel, x => x.BrowseOutputFile, x => x.OutputFileButton);
             this.BindCommand(ViewModel, x => x.BrowseSolver, x => x.SolverButton);
             this.BindCommand(ViewModel, x => x.Run, x => x.RunButton);
+            this.BindCommand(ViewModel, x => x.SWASCIIFlush, x => x.SWASCIIFlushButton);
+            this.BindCommand(ViewModel, x => x.SWPlotState, x => x.SWPlotStateButton);
+            this.BindCommand(ViewModel, x => x.SWRestartContinue, x => x.SWRestartContinueButton);
+            this.BindCommand(ViewModel, x => x.SWRestartStop, x => x.SWRestartStopButton);
+            this.BindCommand(ViewModel, x => x.SWRezonerToggle, x => x.SWRezonerToggleButton);
+            this.BindCommand(ViewModel, x => x.SWTimeAndCycle, x => x.SWTimeAndCycleButton);
+            this.BindCommand(ViewModel, x => x.SWVisToggle, x => x.SWVisToggleButton);
 
             this.Processors.Maximum = Environment.ProcessorCount;
             ViewModel.MPI = FindMPI();
@@ -109,8 +116,35 @@ namespace Predictive.Lsdyna.Mpp
                 });
             solverFilePath.Subscribe(x => this.ViewModel.Solver = x);
 
+            // Run Command
             this.WhenAnyObservable(x => x.ViewModel.Run)
                 .Subscribe(_ => StartCommand());
+
+            // Sense Switch Commands
+
+            // SW1
+            this.WhenAnyObservable(x => x.ViewModel.SWRestartStop)
+                .Subscribe(_ => InsertSenseSwitch("SW1"));
+
+            // SW2
+            this.WhenAnyObservable(x => x.ViewModel.SWTimeAndCycle)
+                .Subscribe(_ => InsertSenseSwitch("SW2"));
+
+            // SW3
+            this.WhenAnyObservable(x => x.ViewModel.SWRestartContinue)
+                .Subscribe(_ => InsertSenseSwitch("SW3"));
+
+            // SW4
+            this.WhenAnyObservable(x => x.ViewModel.SWPlotState)
+                .Subscribe(_ => InsertSenseSwitch("SW4"));
+
+            // SW5
+            this.WhenAnyObservable(x => x.ViewModel.SWVisToggle)
+                .Subscribe(_ => InsertSenseSwitch("SW5"));
+
+            // SWA
+            this.WhenAnyObservable(x => x.ViewModel.SWASCIIFlush)
+                .Subscribe(_ => InsertSenseSwitch("SWA"));
         }
 
         public MainViewModel ViewModel
@@ -147,6 +181,11 @@ namespace Predictive.Lsdyna.Mpp
         private static void LineOutputter(string line)
         {
             Debug.Print(line);
+        }
+
+        private void InsertSenseSwitch(string sw)
+        {
+            File.WriteAllText(String.Format("{0}\\D3KIL", this.ViewModel.WorkingDir), sw);
         }
     }
 
