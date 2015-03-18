@@ -17,13 +17,14 @@ namespace Predictive.Lsdyna.Mpp
     {
         public MainViewModel()
         {
-            var mppcommandArgs = this.WhenAnyValue(x => x.Processors,
-                                            x => x.Solver,
-                                            x => x.InputFile,
-                                            x => x.OutputFile,
-                                            x => x.ExtraCommands,
-                                            (Processors, Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
-                                            .ToProperty(this, x => x.mppCommandArgs, out _mppCommandArgs);
+            var mppcommandArgs = this.WhenAnyValue(
+                                    x => x.Processors,
+                                    x => x.Solver,
+                                    x => x.InputFile,
+                                    x => x.OutputFile,
+                                    x => x.ExtraCommands,
+                                    (Processors, Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
+                                    .ToProperty(this, x => x.mppCommandArgs, out _mppCommandArgs);
 
             var mppcommand = this.WhenAnyValue(
                                 x => x.MPI,
@@ -63,7 +64,6 @@ namespace Predictive.Lsdyna.Mpp
         public ReactiveCommand<object> BrowseOutputFile { get; protected set; }
         public ReactiveCommand<object> BrowseSolver { get; protected set; }
         public ReactiveCommand<object> Run { get; protected set; }
-        public ReactiveCommand<string> RunMPP { get; protected set; }
         public ReactiveCommand<object> SWRestartStop { get; protected set; }
         public ReactiveCommand<object> SWRestartContinue { get; protected set; }
         public ReactiveCommand<object> SWTimeAndCycle { get; protected set; }

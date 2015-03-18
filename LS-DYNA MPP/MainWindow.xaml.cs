@@ -43,6 +43,7 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, x => x.InputFile, x => x.InputFile.Text);
             this.Bind(ViewModel, x => x.OutputFile, x => x.OutputFile.Text);
             this.Bind(ViewModel, x => x.Solver, x => x.Solver.Text);
+            this.Bind(ViewModel, x => x.ExtraCommands, x => x.ExtraCommands.Text);
             
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
 
@@ -82,11 +83,8 @@ namespace Predictive.Lsdyna.Mpp
                       dlg.FileName = this.ViewModel.InputFile;
                       var result = dlg.ShowDialog();
                       inputFilePath.OnNext(dlg.FileName);
-                      if (string.IsNullOrEmpty(this.ViewModel.OutputFile)) 
-                      {            
-                          dlg.CheckFileExists = false;
-                          outputFilePath.OnNext(Path.GetDirectoryName(dlg.FileName) + "\\d3hsp");                     
-                      }
+                      dlg.CheckFileExists = false;
+                      outputFilePath.OnNext(Path.GetDirectoryName(dlg.FileName) + "\\d3hsp");                     
                   });
             inputFilePath.Subscribe(x => this.ViewModel.InputFile = x);
 
@@ -186,6 +184,22 @@ namespace Predictive.Lsdyna.Mpp
         private void InsertSenseSwitch(string sw)
         {
             File.WriteAllText(String.Format("{0}\\D3KIL", this.ViewModel.WorkingDir), sw);
+        }
+
+        private void ShowAdvancedFlyout(object sender, RoutedEventArgs e)
+        {
+            this.ToggleFlyout(0);
+        }
+
+        private void ToggleFlyout(int index)
+        {
+            var flyout = this.Flyouts.Items[index] as Flyout;
+            if (flyout == null)
+            {
+                return;
+            }
+
+            flyout.IsOpen = !flyout.IsOpen;
         }
     }
 
