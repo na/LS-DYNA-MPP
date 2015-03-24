@@ -43,6 +43,8 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, x => x.InputFile, x => x.InputFile.Text);
             this.Bind(ViewModel, x => x.OutputFile, x => x.OutputFile.Text);
             this.Bind(ViewModel, x => x.Solver, x => x.Solver.Text);
+            this.Bind(ViewModel, x => x.Memory, x => x.Memory.Text);
+            this.Bind(ViewModel, x => x.Memory2, x => x.Memory2.Text);
             this.Bind(ViewModel, x => x.ExtraCommands, x => x.ExtraCommands.Text);
             
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
@@ -172,8 +174,8 @@ namespace Predictive.Lsdyna.Mpp
 
         private void StartCommand()
         {
-            var proc = new ProgramHelper(this.ViewModel.MPI);
-            proc.StartProgram(this.ViewModel.mppCommandArgs, this.ViewModel.WorkingDir);
+            var proc = new ProgramHelper("cmd");
+            proc.StartProgram(String.Format("/k {0}", this.ViewModel.mppCommand), this.ViewModel.WorkingDir);
         }
 
         private static void LineOutputter(string line)
@@ -200,6 +202,14 @@ namespace Predictive.Lsdyna.Mpp
             }
 
             flyout.IsOpen = !flyout.IsOpen;
+        }
+
+        private void SaveFile(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Batch file (*.bat)|*.bat";
+            if (saveFileDialog.ShowDialog() == true)
+                File.WriteAllText(saveFileDialog.FileName, String.Format("cmd /k {0}",this.ViewModel.mppCommand));
         }
     }
 

@@ -17,20 +17,23 @@ namespace Predictive.Lsdyna.Mpp
     {
         public MainViewModel()
         {
-            var mppcommandArgs = this.WhenAnyValue(
+            var mppcommand = this.WhenAnyValue(
+                                    x => x.MPI,
                                     x => x.Processors,
                                     x => x.Solver,
                                     x => x.InputFile,
                                     x => x.OutputFile,
+                                    x => x.Memory,
+                                    x => x.Memory2,
                                     x => x.ExtraCommands,
-                                    (Processors, Solver, InputFile, OutputFile, ExtraCommands) => String.Format("-np {0} {1} i={2} o={3} {4}", Processors, Solver, InputFile, OutputFile, ExtraCommands))
-                                    .ToProperty(this, x => x.mppCommandArgs, out _mppCommandArgs);
+                                    (MPI, Processors, Solver, InputFile, OutputFile, Memory, Memory2, ExtraCommands) => String.Format("\"{0}\" -np {1} {2} i={3} o={4} {5} {6} {7}", MPI, Processors, Solver, InputFile, OutputFile, MemoryToOption(Memory), MemoryToOption(Memory2), ExtraCommands))
+                                    .ToProperty(this, x => x.mppCommand, out _mppCommand);
 
-            var mppcommand = this.WhenAnyValue(
-                                x => x.MPI,
-                                x => x.mppCommandArgs,
-                                (MPI, Args) => String.Format("{0} {1}", MPI, Args))
-                                .ToProperty(this, x => x.mppCommand, out _mppCommand);
+            //var mppcommand = this.WhenAnyValue(
+            //                    x => x.MPI,
+            //                    x => x.mppCommandArgs,
+            //                    (MPI, Args) => String.Format("{0} {1}", MPI, Args))
+            //                    .ToProperty(this, x => x.mppCommand, out _mppCommand);
 
             this.WhenAnyValue(x => x.InputFile)
                 .Select(x => Path.GetDirectoryName(x))
@@ -49,7 +52,6 @@ namespace Predictive.Lsdyna.Mpp
                                 (i, o, s, p) => !String.IsNullOrWhiteSpace(i.Value) && !String.IsNullOrWhiteSpace(o.Value) && !String.IsNullOrWhiteSpace(s.Value) && p.Value > 0);
 
             Run = ReactiveCommand.Create(canRunMPP);
-
             SWRestartStop = ReactiveCommand.Create(canRunMPP);
             SWRestartContinue = ReactiveCommand.Create(canRunMPP);
             SWRezonerToggle = ReactiveCommand.Create(canRunMPP);
@@ -100,20 +102,20 @@ namespace Predictive.Lsdyna.Mpp
             set { this.RaiseAndSetIfChanged(ref _processors, value); }
         }
 
-        private int _memory;
-        public int Memory
+        private string _memory;
+        public string Memory
         {
             get { return _memory; }
             set { this.RaiseAndSetIfChanged(ref _memory, value); }
         }
 
-        private int _memory2;
-        public int Memory2
+        private string _memory2;
+        public string Memory2
         {
             get { return _memory2; }
             set { this.RaiseAndSetIfChanged(ref _memory2, value); }
         }
-
+        
         private string _extraCommands;
         public string ExtraCommands
         {
@@ -148,16 +150,21 @@ namespace Predictive.Lsdyna.Mpp
             get { return _mppCommand.Value; }
         }
 
-        ObservableAsPropertyHelper<string> _mppCommandArgs;
-        public string mppCommandArgs
-        {
-            get { return _mppCommandArgs.Value; }
-        }
+        //ObservableAsPropertyHelper<string> _mppCommandArgs;
+        //public string mppCommandArgs
+        //{
+        //    get { return _mppCommandArgs.Value; }
+        //}
 
         ObservableAsPropertyHelper<string> _workingDir;
         public string WorkingDir
         {
             get { return _workingDir.Value; }
+        }
+
+        private string MemoryToOption(String memory)
+        {
+            return String.IsNullOrWhiteSpace(memory) ? null : String.Format("memory={0}", memory);           
         }
     }
 }
