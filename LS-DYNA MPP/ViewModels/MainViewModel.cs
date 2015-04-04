@@ -9,7 +9,7 @@ using ReactiveUI;
 using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
-using Predictive.ProcessExtensions;
+//using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
 {

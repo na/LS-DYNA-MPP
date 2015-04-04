@@ -92,8 +92,15 @@
       <DependentUpon>BrowseFileTextbox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Interfaces.cs" />
+    <Compile Include="Models\AdvancedOptions.cs" />
+    <Compile Include="Models\Lsmpp.cs" />
+    <Compile Include="Models\LsmppOption.cs" />
     <Compile Include="ProcessExtensions.cs" />
+    <Compile Include="ViewModels\AdvancedOptionsViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\AdvancedOptionsView.xaml.cs">
+      <DependentUpon>AdvancedOptionsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\AdvancedOptions.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -117,6 +124,10 @@
     <Page Include="Resources\Icons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AdvancedOptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -148,9 +159,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\WindowsIcons-license.txt" />
   </ItemGroup>

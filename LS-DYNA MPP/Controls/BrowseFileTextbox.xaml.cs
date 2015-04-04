@@ -20,18 +20,22 @@ namespace Predictive.Lsdyna.Mpp.Controls
     /// </summary>
     public partial class BrowseFileTextbox : UserControl
     {
-        public static readonly DependencyProperty WatermarkProperty = 
-            DependencyProperty.Register("WatermarkText", typeof(string), typeof(BrowseFileTextbox));
+
 
         public BrowseFileTextbox()
         {
             InitializeComponent();
+            LayoutRoot.DataContext = this;
         }
 
-        public string Watermark
+        public string WatermarkLabel
         {
-            get { return (string)GetValue(WatermarkProperty); }
-            set { SetValue(WatermarkProperty, value); }
+            get { return (string)GetValue(WatermarkLabelProperty); }
+            set { SetValue(WatermarkLabelProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for Watermark.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty WatermarkLabelProperty =
+            DependencyProperty.Register("WatermarkLabel", typeof(string), typeof(BrowseFileTextbox), new PropertyMetadata(string.Empty));
     }
 }

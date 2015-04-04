@@ -40,27 +40,27 @@ namespace Predictive.Lsdyna.Mpp
             InitializeComponent();
 
             // Data binding
-            this.Bind(ViewModel, x => x.InputFile, x => x.InputFile.Text);
-            this.Bind(ViewModel, x => x.OutputFile, x => x.OutputFile.Text);
-            this.Bind(ViewModel, x => x.Solver, x => x.Solver.Text);
-            this.Bind(ViewModel, x => x.Memory, x => x.Memory.Text);
-            this.Bind(ViewModel, x => x.Memory2, x => x.Memory2.Text);
-            this.Bind(ViewModel, x => x.ExtraCommands, x => x.ExtraCommands.Text);
+            this.Bind(ViewModel, vm => vm.InputFile, v => v.InputFile.Text);
+            this.Bind(ViewModel, vm => vm.OutputFile, v => v.OutputFile.Text);
+            this.Bind(ViewModel, vm => vm.Solver, v => v.Solver.Text);
+            this.Bind(ViewModel, vm => vm.Memory, v => v.Memory.Text);
+            this.Bind(ViewModel, vm => vm.Memory2, v => v.Memory2.Text);
+            this.Bind(ViewModel, vm => vm.ExtraCommands, v => v.ExtraCommands.Text);
             
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
 
             // Command Binding
-            this.BindCommand(ViewModel, x => x.BrowseInputFile, x => x.InputFileButton);
-            this.BindCommand(ViewModel, x => x.BrowseOutputFile, x => x.OutputFileButton);
-            this.BindCommand(ViewModel, x => x.BrowseSolver, x => x.SolverButton);
-            this.BindCommand(ViewModel, x => x.Run, x => x.RunButton);
-            this.BindCommand(ViewModel, x => x.SWASCIIFlush, x => x.SWASCIIFlushButton);
-            this.BindCommand(ViewModel, x => x.SWPlotState, x => x.SWPlotStateButton);
-            this.BindCommand(ViewModel, x => x.SWRestartContinue, x => x.SWRestartContinueButton);
-            this.BindCommand(ViewModel, x => x.SWRestartStop, x => x.SWRestartStopButton);
-            this.BindCommand(ViewModel, x => x.SWRezonerToggle, x => x.SWRezonerToggleButton);
-            this.BindCommand(ViewModel, x => x.SWTimeAndCycle, x => x.SWTimeAndCycleButton);
-            this.BindCommand(ViewModel, x => x.SWVisToggle, x => x.SWVisToggleButton);
+            this.BindCommand(ViewModel, vm => vm.BrowseInputFile, v => v.InputFileButton);
+            this.BindCommand(ViewModel, vm => vm.BrowseOutputFile, v => v.OutputFileButton);
+            this.BindCommand(ViewModel, vm => vm.BrowseSolver, v => v.SolverButton);
+            this.BindCommand(ViewModel, vm => vm.Run, v => v.RunButton);
+            this.BindCommand(ViewModel, vm => vm.SWASCIIFlush, v => v.SWASCIIFlushButton);
+            this.BindCommand(ViewModel, vm => vm.SWPlotState, v => v.SWPlotStateButton);
+            this.BindCommand(ViewModel, vm => vm.SWRestartContinue, v => v.SWRestartContinueButton);
+            this.BindCommand(ViewModel, vm => vm.SWRestartStop, v => v.SWRestartStopButton);
+            this.BindCommand(ViewModel, vm => vm.SWRezonerToggle, v => v.SWRezonerToggleButton);
+            this.BindCommand(ViewModel, vm => vm.SWTimeAndCycle, v => v.SWTimeAndCycleButton);
+            this.BindCommand(ViewModel, vm => vm.SWVisToggle, v => v.SWVisToggleButton);
 
             this.Processors.Maximum = Environment.ProcessorCount;
             ViewModel.MPI = FindMPI();

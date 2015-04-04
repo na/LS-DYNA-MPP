@@ -1,7 +1,8 @@
-﻿<Controls:MetroWindow x:Class="Predictive.Lsdyna.Mpp.MainWindow"
+﻿<Controls:MetroWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Controls1="clr-namespace:Predictive.Lsdyna.Mpp.Controls" x:Class="Predictive.Lsdyna.Mpp.MainWindow"
         GlowBrush="{DynamicResource AccentColorBrush}"
         ResizeMode="CanResizeWithGrip"
         Icon="PredENGR.logo.ico"
@@ -10,13 +11,13 @@
         Title="MPPDYNA Manager by Predictive Engineering" 
         Height="506" 
         Width="726" MinWidth="600" MinHeight="400">
-    <Window.Resources>
+    <Controls:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>
+    </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
             <Controls:Flyout Header="Flyout" Position="Right" Width="400">
@@ -30,7 +31,7 @@
             <Button Click="SaveFile">
                 <StackPanel Orientation="Horizontal">
                     <Rectangle Width="16" Height="16"
-                               Fill="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}">
+                               Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill"
                          Visual="{StaticResource appbar_save}" />
@@ -59,8 +60,7 @@
     </Controls:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.Background>
-            <ImageBrush ImageSource="predictive-engineering-logo 2.png" AlignmentX="Left" AlignmentY="Bottom" Stretch="None" TileMode="None" >
-            </ImageBrush>
+            <ImageBrush ImageSource="predictive-engineering-logo 2.png" AlignmentX="Left" AlignmentY="Bottom" Stretch="None" TileMode="None" />
         </Grid.Background>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="75"/>
@@ -69,7 +69,8 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -81,274 +82,292 @@
 
 
         <Label Content="Input File" 
-               Grid.Column="1" 
-               Grid.Row="1" FontWeight="Bold" FontSize="14" Margin="6"/>
+			Grid.Column="1" 
+			Grid.Row="1" FontWeight="Bold" FontSize="14" Margin="6"/>
         <TextBox x:Name="InputFile" 
-                 TextWrapping="noWrap" 
-                 Grid.Column="2" 
-                 Grid.Row="1" 
-                 FontSize="14" 
-                 Margin="6" 
-                 ToolTip="{Binding InputFile}" />
+			TextWrapping="noWrap" 
+			Grid.Column="2" 
+			Grid.Row="1" 
+			FontSize="14" 
+			Margin="6" 
+			ToolTip="{Binding InputFile}" />
         <Button x:Name="InputFileButton"
-        	    Content="Browse"  
-        	    Padding="14,3"
-        	    Style="{DynamicResource SquareButtonStyle}" 
-                Grid.Column="3" 
-                Grid.Row="1" 
-                Margin="6,6,12,6" />
+			Content="Browse"  
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" 
+			Grid.Column="3" 
+			Grid.Row="1" 
+			Margin="6,6,12,6" />
+
+        <Label Content="Restart File" 
+			Grid.Column="1" 
+			Grid.Row="2" FontWeight="Bold" FontSize="14" Margin="6"/>
+        <TextBox x:Name="RestartFile" 
+			TextWrapping="noWrap" 
+			Grid.Column="2" 
+			Grid.Row="2" 
+			FontSize="14" 
+			Margin="6" 
+			ToolTip="{Binding InputFile}" />
+        <Button x:Name="RestartFileButton"
+			Content="Browse"  
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" 
+			Grid.Column="3" 
+			Grid.Row="2" 
+			Margin="6,6,12,6" />
 
         <Label Content="Output File" 
-               Grid.Row="2" 
-               Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
+			Grid.Row="3" 
+			Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
         <TextBox TextWrapping="noWrap" 
-                 x:Name="OutputFile"
-                 Grid.Row="2" 
-                 Grid.Column="2" FontSize="14" Margin="6" ToolTip="{Binding OutputFile}"/>
+			x:Name="OutputFile"
+			Grid.Row="3" 
+			Grid.Column="2" FontSize="14" Margin="6" ToolTip="{Binding OutputFile}"/>
         <Button 
-            x:Name="OutputFileButton"
-        	Content="Browse" 
-        	Padding="14,3"
-        	Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="2" Margin="6,6,12,6" />
+			x:Name="OutputFileButton"
+			Content="Browse" 
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="3" Margin="6,6,12,6" />
 
         <Label Content="Solver" 
-               Grid.Row="3" 
-               Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
+			Grid.Row="4" 
+			Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
         <TextBox TextWrapping="noWrap" 
-                 x:Name="Solver"
-                 Grid.Row="3" 
-                 Grid.Column="2" FontSize="14" Margin="6" ToolTip="{Binding Solver}"/>
+			x:Name="Solver"
+			Grid.Row="4" 
+			Grid.Column="2" FontSize="14" Margin="6" ToolTip="{Binding Solver}"/>
         <Button x:Name="SolverButton"
-        	Content="Browse" 
-        	Padding="14,3"
-        	Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="3" Margin="6,6,12,6" />
+			Content="Browse" 
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="4" Margin="6,6,12,6" />
 
         <Label Content="Processors" 
-               Grid.Row="4" 
-               Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
-        <UniformGrid Rows="1" Grid.Row="4" Grid.Column="2">
+			Grid.Row="5" 
+			Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
+        <UniformGrid Rows="1" Grid.Row="5" Grid.Column="2">
             <Controls:NumericUpDown x:Name="Processors"
-                TextAlignment="Left"
-        		Minimum="0"
-        		Maximum="10" 
-                Value="{Binding Processors}"
-        		InterceptArrowKeys="True"
-        		InterceptManualEnter="True"
-        		InterceptMouseWheel="True" FontSize="14" Margin="6" Height="27"/>
+				TextAlignment="Left"
+				Minimum="0"
+				Maximum="10" 
+				Value="{Binding Processors}"
+				InterceptArrowKeys="True"
+				InterceptManualEnter="True"
+				InterceptMouseWheel="True" FontSize="14" Margin="6" Height="27"/>
             <TextBox x:Name="Memory"
-                     FontSize="14" 
-                     Margin="6"
-                     Controls:TextBoxHelper.Watermark="Memory"/>
+				FontSize="14" 
+				Margin="6"
+				Controls:TextBoxHelper.Watermark="Memory"/>
             <TextBox x:Name="Memory2"
-                     FontSize="14" 
-                     Margin="6"
-                     Controls:TextBoxHelper.Watermark="Memory2"/>
+				FontSize="14" 
+				Margin="6"
+				Controls:TextBoxHelper.Watermark="Memory2"/>
         </UniformGrid>
         <Button x:Name="AdvancedButton"
-        	    Content="Advanced" 
-                Click="ShowAdvancedFlyout"
-        	    Padding="14,3"
-        	    Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="4" Margin="6,6,12,6" />
+			Content="Advanced" 
+			Click="ShowAdvancedFlyout"
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" Grid.Column="3" Grid.Row="5" Margin="6,6,12,6" />
 
         <Label Content="Extra Commands" 
-        	    Grid.Row="5" 
-        	    Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
+			Grid.Row="6" 
+			Grid.Column="1" FontWeight="Bold" FontSize="14" Margin="6"/>
         <TextBox x:Name="ExtraCommands" 
-                 TextWrapping="Wrap"  
-        	     Grid.Row="5" 
-        	     Grid.Column="2" 
-                 FontSize="14" 
-                 Margin="6"/>
+			TextWrapping="Wrap"  
+			Grid.Row="6" 
+			Grid.Column="2" 
+			FontSize="14" 
+			Margin="6"/>
         <Button x:Name="MoreOptionsButton"
-        	    Content="More Options" 
-        	    Padding="14,3"
-        	    Style="{DynamicResource SquareButtonStyle}" 
-                Grid.Column="3" 
-                Grid.Row="5" 
-                Margin="6,6,12,6" />
+			Content="More Options" 
+			Padding="14,3"
+			Style="{DynamicResource SquareButtonStyle}" 
+			Grid.Column="3" 
+			Grid.Row="6" 
+			Margin="6,6,12,6" />
 
         <Label Content="Preview" 
-        	   Grid.Row="6" 
-        	   Grid.Column="1" 
-               FontWeight="Bold" 
-               FontSize="14" 
-               Margin="6"/>
+			Grid.Row="7" 
+			Grid.Column="1" 
+			FontWeight="Bold" 
+			FontSize="14" 
+			Margin="6"/>
         <TextBox x:Name="CommandPreview" 
-                 IsReadOnly="True" 
-                 Grid.Column="2" 
-                 Grid.Row="6" 
-                 TextWrapping="Wrap" 
-                 Grid.ColumnSpan="2" 
-                 Margin="6,6,12,6" 
-                 Text="{Binding mppCommand, Mode=OneWay}" 
-                 BorderThickness="0"/>
+			IsReadOnly="True" 
+			Grid.Column="2" 
+			Grid.Row="7" 
+			TextWrapping="Wrap" 
+			Grid.ColumnSpan="2" 
+			Margin="6,6,12,6" 
+			Text="{Binding mppCommand, Mode=OneWay}" 
+			BorderThickness="0"/>
 
-        <UniformGrid Grid.Column="2" Rows="1" HorizontalAlignment="Right" Grid.Row="7" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Height="62" Width="400" Margin="0,0,12,12" >
+        <UniformGrid Grid.Column="2" Rows="1" HorizontalAlignment="Right" Grid.Row="8" VerticalAlignment="Bottom" Grid.ColumnSpan="2" Height="62" Width="400" Margin="0,0,12,12" >
             <Button x:Name="RunButton" 
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20">
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20">
                 <Rectangle Width="20"
-                                   Height="20"
-                                   Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" Margin="4,0,0,0">
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}" Margin="4,0,0,0">
                     <Rectangle.OpacityMask>
                         <VisualBrush Stretch="Fill"
-                                             Visual="{DynamicResource appbar_control_play}" />
+							Visual="{DynamicResource appbar_control_play}" />
                     </Rectangle.OpacityMask>
                 </Rectangle>
             </Button>
             <Button x:Name="SWRestartStopButton" 
-                    Grid.Column="1" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_loop}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="1" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW1"</TextBlock>
-                            <TextBlock>A restart file is written and LS-DYNA MPP terminates.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW1&quot;"/></TextBlock>
+                            <TextBlock><Run Text="A restart file is written and LS-DYNA MPP terminates."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_loop}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWTimeAndCycleButton" 
-                    Grid.Column="2" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_medical_pulse}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="2" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW2"</TextBlock>
-                            <TextBlock>LS-DYNA MPP responds with time and cycle numbers.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW2&quot;"/></TextBlock>
+                            <TextBlock><Run Text="LS-DYNA MPP responds with time and cycle numbers."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_medical_pulse}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWRestartContinueButton" 
-                    Grid.Column="3" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_repeat}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="3" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW3"</TextBlock>
-                            <TextBlock>A restart file is written and LS-DYNA MPP continues.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW3&quot;"/></TextBlock>
+                            <TextBlock><Run Text="A restart file is written and LS-DYNA MPP continues."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_repeat}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWPlotStateButton" 
-                    Grid.Column="4" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_graph_line}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="4" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW4"</TextBlock>
-                            <TextBlock>A plot file is written and LS-DYNA MPP continues.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW4&quot;"/></TextBlock>
+                            <TextBlock><Run Text="A plot file is written and LS-DYNA MPP continues."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_graph_line}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWVisToggleButton" 
-                    Grid.Column="5" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_monitor_play}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="5" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW5"</TextBlock>
-                            <TextBlock>Enter interactive graphics phase and real time visualization.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW5&quot;"/></TextBlock>
+                            <TextBlock><Run Text="Enter interactive graphics phase and real time visualization."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_monitor_play}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWRezonerToggleButton" 
-                    Grid.Column="6" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_box}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="6" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SW8"</TextBlock>
-                            <TextBlock>Interactive 2D rezoner for solid elements and real time visualization.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SW8&quot;"/></TextBlock>
+                            <TextBlock><Run Text="Interactive 2D rezoner for solid elements and real time visualization."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_box}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
             <Button x:Name="SWASCIIFlushButton" 
-                    Grid.Column="7" 
-                    Command="{Binding Stop}"
-                    Height="50"
-                    Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
-                <Rectangle Width="20"
-                                       Height="20"
-                                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
-                    <Rectangle.OpacityMask>
-                        <VisualBrush Stretch="Fill"
-                                                 Visual="{DynamicResource appbar_list_delete}" />
-                    </Rectangle.OpacityMask>
-                </Rectangle>
+				Grid.Column="7" 
+				Command="{Binding Stop}"
+				Height="50"
+				Style="{DynamicResource MetroCircleButtonStyle}" FontSize="20" BorderBrush="Red">
                 <Button.ToolTip>
                     <ToolTip>
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Sense Switch "SWA"</TextBlock>
-                            <TextBlock>Flush ASCII file buffers.</TextBlock>
+                            <TextBlock FontWeight="Bold"><Run Text="Sense Switch &quot;SWA&quot;"/></TextBlock>
+                            <TextBlock><Run Text="Flush ASCII file buffers."/></TextBlock>
                         </StackPanel>
                     </ToolTip>
                 </Button.ToolTip>
+                <Rectangle Width="20"
+					Height="20"
+					Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                    <Rectangle.OpacityMask>
+                        <VisualBrush Stretch="Fill"
+							Visual="{DynamicResource appbar_list_delete}" />
+                    </Rectangle.OpacityMask>
+                </Rectangle>
             </Button>
         </UniformGrid>
 

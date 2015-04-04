@@ -6,38 +6,35 @@ using System.Diagnostics;
 
 namespace Predictive.ProcessExtensions
 {
+    /// <summary>
+    /// Extensions for System.Diagnostics.Process to turn StandardOutput and StandardError into observables.
+    /// </summary>
     public static class ProcessExtension
     {
-        public static IObservable<string> StandardOutputObservable(this System.Diagnostics.Process @this)
+        public static IObservable<string> StandardOutputObservable(this System.Diagnostics.Process process)
         {
             var receivedStdOut =
                 Observable.FromEventPattern<DataReceivedEventHandler, DataReceivedEventArgs>
-                (h => @this.OutputDataReceived += h,
-                 h => @this.OutputDataReceived -= h)
+                (h => process.OutputDataReceived += h,
+                 h => process.OutputDataReceived -= h)
                 .Select(e => e.EventArgs.Data);
 
-            return Observable.Create<string>(observer =>
-            {
-                var cancel = Disposable.Create(@this.CancelOutputRead);
+            process.BeginOutputReadLine();
 
-                return new CompositeDisposable(cancel, receivedStdOut.Subscribe(observer));
-            });
+            return receivedStdOut;
         }
 
-        public static IObservable<string> StandardErrorObservable(this System.Diagnostics.Process @this)
+        public static IObservable<string> StandardErrorObservable(this System.Diagnostics.Process process)
         {
             var receivedStdErr =
                 Observable.FromEventPattern<DataReceivedEventHandler, DataReceivedEventArgs>
-                (h => @this.ErrorDataReceived += h,
-                 h => @this.ErrorDataReceived -= h)
+                (h => process.ErrorDataReceived += h,
+                 h => process.ErrorDataReceived -= h)
                 .Select(e => e.EventArgs.Data);
+            
+            process.BeginErrorReadLine();
 
-            return Observable.Create<string>(observer =>
-            {
-                var cancel = Disposable.Create(@this.CancelErrorRead);
-
-                return new CompositeDisposable(cancel, receivedStdErr.Subscribe(observer));
-            });
+            return receivedStdErr;
         }
     }
 }
