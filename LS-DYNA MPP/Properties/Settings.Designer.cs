@@ -34,5 +34,29 @@ namespace Predictive.Lsdyna.Mpp.Properties {
                 this["mppPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastWorkingDir {
+            get {
+                return ((string)(this["lastWorkingDir"]));
+            }
+            set {
+                this["lastWorkingDir"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string lastCommand {
+            get {
+                return ((string)(this["lastCommand"]));
+            }
+            set {
+                this["lastCommand"] = value;
+            }
+        }
     }
 }

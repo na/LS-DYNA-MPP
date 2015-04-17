@@ -19,7 +19,8 @@ using ReactiveUI;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Reactive.Disposables;
-using Predictive.ProcessExtensions;
+using Predictive.StringExtensions;
+//using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
 {
@@ -30,9 +31,10 @@ namespace Predictive.Lsdyna.Mpp
     {
         // File filters for openFileDialogs
         const string inputFileFilter = "Input Data Files (*.dyn,*.d,*.dat,*.k,*.key)|*.dyn;*.d;*.dat;*.k*.key|All files (*.*)|*.*";
+        const string restartFileFilter = "Restart Data Files (d3dump*, d3full*)|d3dump*.*;d3full*|All files (*.*)|*.*";
         const string allFileFilter = "All files (*.*)|*.*";
         const string exeFileFilter = "Executable (*.exe)| *.exe";
-        
+
         public MainWindow()
         {
             ViewModel = new MainViewModel();
@@ -42,15 +44,18 @@ namespace Predictive.Lsdyna.Mpp
             // Data binding
             this.Bind(ViewModel, vm => vm.InputFile, v => v.InputFile.Text);
             this.Bind(ViewModel, vm => vm.OutputFile, v => v.OutputFile.Text);
+            this.Bind(ViewModel, vm => vm.RestartFile, v => v.RestartFile.Text);
             this.Bind(ViewModel, vm => vm.Solver, v => v.Solver.Text);
             this.Bind(ViewModel, vm => vm.Memory, v => v.Memory.Text);
             this.Bind(ViewModel, vm => vm.Memory2, v => v.Memory2.Text);
             this.Bind(ViewModel, vm => vm.ExtraCommands, v => v.ExtraCommands.Text);
+            this.Bind(ViewModel, vm => vm.Affinity, v => v.Affinity.IsChecked);
             
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
 
             // Command Binding
             this.BindCommand(ViewModel, vm => vm.BrowseInputFile, v => v.InputFileButton);
+            this.BindCommand(ViewModel, vm => vm.BrowseRestartFile, v => v.RestartFileButton);
             this.BindCommand(ViewModel, vm => vm.BrowseOutputFile, v => v.OutputFileButton);
             this.BindCommand(ViewModel, vm => vm.BrowseSolver, v => v.SolverButton);
             this.BindCommand(ViewModel, vm => vm.Run, v => v.RunButton);
@@ -63,7 +68,7 @@ namespace Predictive.Lsdyna.Mpp
             this.BindCommand(ViewModel, vm => vm.SWVisToggle, v => v.SWVisToggleButton);
 
             this.Processors.Maximum = Environment.ProcessorCount;
-            ViewModel.MPI = FindMPI();
+            ViewModel.MPI = "mpiexec.exe";
             ViewModel.Solver = Properties.Settings.Default["mppPath"].ToString();
             ViewModel.Processors = Environment.ProcessorCount;
             
@@ -82,13 +87,33 @@ namespace Predictive.Lsdyna.Mpp
                 .Subscribe(_ => 
                   {
                       dlg.Filter = inputFileFilter;
-                      dlg.FileName = this.ViewModel.InputFile;
+                      dlg.FileName = InputFile.Text;
                       var result = dlg.ShowDialog();
-                      inputFilePath.OnNext(dlg.FileName);
-                      dlg.CheckFileExists = false;
-                      outputFilePath.OnNext(Path.GetDirectoryName(dlg.FileName) + "\\d3hsp");                     
+                      if (result == true)
+                      {
+                          inputFilePath.OnNext(dlg.FileName);
+                          this.InputFile.Text = dlg.FileName;
+                          dlg.CheckFileExists = false;
+                          this.OutputFile.Text = dlg.FileName.Directory() + "\\d3hsp";
+                      }                    
                   });
-            inputFilePath.Subscribe(x => this.ViewModel.InputFile = x);
+            //inputFilePath.Subscribe(x => this.ViewModel.InputFile = x);
+
+
+            // Restart File Dialog Box
+            this.WhenAnyObservable(x => x.ViewModel.BrowseRestartFile)
+                .Subscribe(_ =>
+                {
+                    dlg.CheckFileExists = false;
+                    dlg.Filter = restartFileFilter;
+                    dlg.FileName = RestartFile.Text;
+                    var result = dlg.ShowDialog();
+                    if (result == true)
+                    {
+                        this.RestartFile.Text = String.Format("{0}\\{1}", dlg.FileName.Directory(), dlg.FileName.FileNameWithoutExtension());
+                        this.OutputFile.Text = dlg.FileName.Directory() + "\\d3hsp";
+                    }
+                });
 
             // Output File Dialog Box
             this.WhenAnyObservable(x => x.ViewModel.BrowseOutputFile)
@@ -96,11 +121,10 @@ namespace Predictive.Lsdyna.Mpp
                   {
                       dlg.CheckFileExists = false;
                       dlg.Filter = allFileFilter;
-                      dlg.FileName = this.ViewModel.OutputFile;
+                      dlg.FileName = OutputFile.Text;
                       var result = dlg.ShowDialog();
-                      outputFilePath.OnNext(dlg.FileName);
+                      this.OutputFile.Text = dlg.FileName.GetShortPathName();
                   });
-            outputFilePath.Subscribe(x => this.ViewModel.OutputFile = x);
 
             // Solver Dialog Box
             this.WhenAnyObservable(x => x.ViewModel.BrowseSolver)
@@ -108,7 +132,8 @@ namespace Predictive.Lsdyna.Mpp
                 {
                     dlg.CheckFileExists = true;
                     dlg.Filter = exeFileFilter;
-                    dlg.FileName = this.ViewModel.Solver;
+                    dlg.FileName = Solver.Text;
+                    //dlg.InitialDirectory = Path.GetDirectoryName(Solver.Text);
                     var result = dlg.ShowDialog();
                     Properties.Settings.Default["mppPath"] = dlg.FileName;
                     Properties.Settings.Default.Save();
@@ -175,6 +200,8 @@ namespace Predictive.Lsdyna.Mpp
         private void StartCommand()
         {
             var proc = new ProgramHelper("cmd");
+            Properties.Settings.Default["lastWorkingDir"] = this.ViewModel.WorkingDir;
+            Properties.Settings.Default["lastCommand"] = this.ViewModel.mppCommand;
             proc.StartProgram(String.Format("/k {0}", this.ViewModel.mppCommand), this.ViewModel.WorkingDir);
         }
 
@@ -211,6 +238,19 @@ namespace Predictive.Lsdyna.Mpp
             if (saveFileDialog.ShowDialog() == true)
                 File.WriteAllText(saveFileDialog.FileName, String.Format("cmd /k {0}",this.ViewModel.mppCommand));
         }
+
+        private void LaunchPEWebsite(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://www.predictiveengineering.com/"); ;
+        }
+
+        private void RunLast(object sender, RoutedEventArgs e)
+        {
+            var proc = new ProgramHelper("cmd");
+            var lastWorkingDir = Properties.Settings.Default["lastWorkingDir"].ToString();
+            var lastCommand = Properties.Settings.Default["lastCommand"].ToString();
+            proc.StartProgram(String.Format("/k {0}", lastCommand), lastWorkingDir);
+        }
     }
 
     public sealed class ProgramHelper
@@ -232,7 +272,7 @@ namespace Predictive.Lsdyna.Mpp
             _program.StartInfo.Arguments = programArgs;
             _program.Start();
 
-            ObservableOutput = _program.StandardOutputObservable();
+            //ObservableOutput = _program.StandardOutputObservable();
         }
     }
 }

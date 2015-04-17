@@ -10,22 +10,21 @@ namespace Predictive.Lsdyna.Mpp.Models
     {
         public string Flag { get; private set; }
         public string Name { get; private set; }
-        public string Value { get; set; }
+        public string Option { get; set; }
         public string HelpText { get; set; }
 
-        public LsmppOption(string name, string flag, string value = "", string helpText="")
+        public LsmppOption(string name, string flag, string option = "", string helpText="")
         {
             Flag = flag;
             Name = name;
             HelpText = helpText;
-            Value = value;
+            Option = option;
         }
 
         public override string ToString()
         {
-            return String.Format("{0}={1}", Flag, Value);
+            // this is ugly but it is time to get beta out.
+            return string.IsNullOrEmpty(Option) ? "" : String.Format(" {0}={1}", Flag, Option);
         }
-
-
     }
 }
