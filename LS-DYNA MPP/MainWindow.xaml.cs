@@ -91,7 +91,7 @@ namespace Predictive.Lsdyna.Mpp
                       var result = dlg.ShowDialog();
                       if (result == true)
                       {
-                          inputFilePath.OnNext(dlg.FileName);
+                          //inputFilePath.OnNext(dlg.FileName);
                           this.InputFile.Text = dlg.FileName;
                           dlg.CheckFileExists = false;
                           this.OutputFile.Text = dlg.FileName.Directory() + "\\d3hsp";

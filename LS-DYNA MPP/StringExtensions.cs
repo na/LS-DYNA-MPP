@@ -42,9 +42,9 @@ namespace Predictive.StringExtensions
         {
             if (string.IsNullOrWhiteSpace(str))
             {
-                return string.Empty;
+                return str;
             } else {
-                return str.Contains(" ") ? string.Format("{0}='{1}'", flag, str) : string.Format("{0}={1}", flag, str);
+                return string.Format("{0}={1}", flag, str);
             }
         }
 

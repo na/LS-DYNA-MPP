@@ -77,10 +77,10 @@
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.Flyouts>
         <Controls:FlyoutsControl>
-            <Controls:Flyout x:Name="AdvancedOptions" Header="Flyout" Position="Right" Width="400">
+            <Controls:Flyout x:Name="AdvancedOptions" Header="Advanced Options" Position="Right" Width="400">
                 <!-- Your custom content here -->
                 <Grid>
-                    <TextBox x:Name="InputFileAdvancedOption" Text="Hello"></TextBox>
+                    <TextBox x:Name="InputFileAdvancedOption" Text="Not Yet Implemented" Margin="10"></TextBox>
                 </Grid>
             </Controls:Flyout>
         </Controls:FlyoutsControl>

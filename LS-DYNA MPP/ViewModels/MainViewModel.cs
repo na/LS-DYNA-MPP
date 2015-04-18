@@ -37,7 +37,7 @@ namespace Predictive.Lsdyna.Mpp
                 x => x.RestartFile,
                 (input, restart) => ToWorkingDir(input.Value, restart.Value)).ToProperty(this, x => x.WorkingDir, out _workingDir);
 
-            //this.WhenAnyValue(x => x.OutputFile).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x => File.Create(x));
+            this.WhenAnyValue(x => x.OutputFile).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x => File.Create(x));
             //    )
             //    .Where(x => x !="")
             //    .Select(x => x.Directory())
