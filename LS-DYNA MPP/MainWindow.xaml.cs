@@ -30,7 +30,7 @@ namespace Predictive.Lsdyna.Mpp
     public partial class MainWindow : MetroWindow, IViewFor<MainViewModel>
     {
         // File filters for openFileDialogs
-        const string inputFileFilter = "Input Data Files (*.dyn,*.d,*.dat,*.k,*.key)|*.dyn;*.d;*.dat;*.k*.key|All files (*.*)|*.*";
+        const string inputFileFilter = "Input Data Files (*.dyn,*.d,*.dat,*.k,*.key)|*.dyn;*.d;*.dat;*.k;*.key|All files (*.*)|*.*";
         const string restartFileFilter = "Restart Data Files (d3dump*, d3full*)|d3dump*.*;d3full*|All files (*.*)|*.*";
         const string allFileFilter = "All files (*.*)|*.*";
         const string exeFileFilter = "Executable (*.exe)| *.exe";
@@ -48,7 +48,8 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, vm => vm.Solver, v => v.Solver.Text);
             this.Bind(ViewModel, vm => vm.Memory, v => v.Memory.Text);
             this.Bind(ViewModel, vm => vm.Memory2, v => v.Memory2.Text);
-            this.Bind(ViewModel, vm => vm.ExtraCommands, v => v.ExtraCommands.Text);
+            this.Bind(ViewModel, vm => vm.ExtraMPICommands, v => v.ExtraMPICommands.Text);
+            this.Bind(ViewModel, vm => vm.ExtraMPPCommands, v => v.ExtraMPPCommands.Text);
             this.Bind(ViewModel, vm => vm.Affinity, v => v.Affinity.IsChecked);
             
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
@@ -251,6 +252,43 @@ namespace Predictive.Lsdyna.Mpp
             var lastCommand = Properties.Settings.Default["lastCommand"].ToString();
             proc.StartProgram(String.Format("/k {0}", lastCommand), lastWorkingDir);
         }
+
+
+        ///http://stackoverflow.com/questions/1600962/displaying-the-build-date
+        private DateTime RetrieveLinkerTimestamp()
+        {
+            string filePath = System.Reflection.Assembly.GetCallingAssembly().Location;
+            const int c_PeHeaderOffset = 60;
+            const int c_LinkerTimestampOffset = 8;
+            byte[] b = new byte[2048];
+            System.IO.Stream s = null;
+
+            try
+            {
+                s = new System.IO.FileStream(filePath, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                s.Read(b, 0, 2048);
+            }
+            finally
+            {
+                if (s != null)
+                {
+                    s.Close();
+                }
+            }
+
+            int i = System.BitConverter.ToInt32(b, c_PeHeaderOffset);
+            int secondsSince1970 = System.BitConverter.ToInt32(b, i + c_LinkerTimestampOffset);
+            DateTime dt = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            dt = dt.AddSeconds(secondsSince1970);
+            dt = dt.ToLocalTime();
+            return dt;
+        }
+
+        public string AppTitle
+        {
+            get {return String.Format("LS-DYNA MPP Program Manager – {0}", RetrieveLinkerTimestamp().ToShortDateString());}
+            //get { return "Hello World"; }
+        }
     }
 
     public sealed class ProgramHelper
@@ -275,4 +313,5 @@ namespace Predictive.Lsdyna.Mpp
             //ObservableOutput = _program.StandardOutputObservable();
         }
     }
+
 }

@@ -22,14 +22,15 @@ namespace Predictive.Lsdyna.Mpp
             var mppcommand = this.WhenAnyValue(
                                     x => x.Affinity,
                                     x => x.Processors,
+                                    x => x.ExtraMPICommands,
                                     x => x.Solver,
                                     x => x.InputFile,
                                     x => x.RestartFile,
                                     x => x.OutputFile,
                                     x => x.Memory,
                                     x => x.Memory2,
-                                    x => x.ExtraCommands,
-                                    (affinity, processors, solver, inputFile, restart, outputFile, memory, memory2, extraCommands) => String.Format("mpiexec.exe {0} -np {1} {2} {3} {4} {5} {6} {7} {8}", affinity ? "-affinity" : "", processors, solver, inputFile.GetShortPathName().ToOption("I"), RestartToOption(restart.GetShortPathName()), outputFile.GetShortPathName().ToOption("O"), memory.ToOption("Memory"), memory2.ToOption("Memory2"), extraCommands))
+                                    x => x.ExtraMPPCommands,
+                                    (affinity, processors, extraMPICommands, solver, inputFile, restart, outputFile, memory, memory2, extraMPPCommands) => String.Format("mpiexec.exe {0} -np {1} {2} {3} {4} {5} {6} {7} {8} {9}", affinity ? "-affinity" : "", processors, extraMPICommands, solver, inputFile.GetShortPathName().ToOption("I"), RestartToOption(restart.GetShortPathName()), outputFile.GetShortPathName().ToOption("O"), memory.ToOption("Memory"), memory2.ToOption("Memory2"), extraMPPCommands))
                                     .ToProperty(this, x => x.mppCommand, out _mppCommand);
 
             this.WhenAny(
@@ -38,16 +39,6 @@ namespace Predictive.Lsdyna.Mpp
                 (input, restart) => ToWorkingDir(input.Value, restart.Value)).ToProperty(this, x => x.WorkingDir, out _workingDir);
 
             this.WhenAnyValue(x => x.OutputFile).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x => File.Create(x));
-            //    )
-            //    .Where(x => x !="")
-            //    .Select(x => x.Directory())
-            //    .Log(this, "Working Directory")
-            //    .ToProperty(this, x => x.WorkingDir, out _workingDir);
-
-            //this.WhenAnyValue(x => x.RestartFile)
-            //    .Where(x => x != "")
-            //    .Select(x => x.Directory())
-            //    .ToProperty(this, x => x.WorkingDir, out _workingDir);
 
             BrowseInputFile = ReactiveCommand.Create();
             BrowseRestartFile = ReactiveCommand.Create();
@@ -156,11 +147,18 @@ namespace Predictive.Lsdyna.Mpp
             set { this.RaiseAndSetIfChanged(ref _affinity, value); }
         }
 
-        private string _extraCommands;
-        public string ExtraCommands
+        private string _extraMPPCommands;
+        public string ExtraMPPCommands
         {
-            get { return _extraCommands; }
-            set { this.RaiseAndSetIfChanged(ref _extraCommands, value); }
+            get { return _extraMPPCommands; }
+            set { this.RaiseAndSetIfChanged(ref _extraMPPCommands, value); }
+        }
+
+        private string _extraMPICommands;
+        public string ExtraMPICommands
+        {
+            get { return _extraMPICommands; }
+            set { this.RaiseAndSetIfChanged(ref _extraMPICommands, value); }
         }
 
         private string _outputText;
