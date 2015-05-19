@@ -15,7 +15,7 @@
         ShowTitleBar="True"
         Title="{Binding AppTitle,ElementName=MainAppWindow}" 
         Height="600" 
-        Width="726" MinWidth="600" MinHeight="500"
+        Width="900" MinWidth="600" MinHeight="500"
         RightWindowCommandsOverlayBehavior="HiddenTitleBar">
     
     <Controls:MetroWindow.Resources>
