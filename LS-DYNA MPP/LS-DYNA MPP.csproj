@@ -123,8 +123,8 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs" />
-    <Compile Include="Views\AdvancedOptionsView.xaml.cs">
-      <DependentUpon>AdvancedOptionsView.xaml</DependentUpon>
+    <Compile Include="Views\AdvancedOptionsFlyout.xaml.cs">
+      <DependentUpon>AdvancedOptionsFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsFlyout.xaml.cs">
       <DependentUpon>SettingsFlyout.xaml</DependentUpon>
@@ -161,7 +161,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\AdvancedOptionsView.xaml">
+    <Page Include="Views\AdvancedOptionsFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

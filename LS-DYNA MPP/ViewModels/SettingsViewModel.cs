@@ -20,7 +20,8 @@ namespace Predictive.Lsdyna.Mpp
         {
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense );
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(0)).ToProperty(this, x => x.IsLocalLicense, out _isLocalLicense);
-            this.WhenAnyValue(x => x.LicenseServer).Throttle(TimeSpan.FromMilliseconds(800)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_LICENSE_SERVER",x,EnvironmentVariableTarget.User));
+            this.WhenAnyValue(x => x.LicenseServer).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_LICENSE_SERVER",x,EnvironmentVariableTarget.User));
+            this.WhenAnyValue(x => x.LocalLicenseFile).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_FILE", x, EnvironmentVariableTarget.User));
         }
 
         private int _licenseTypeIndex;

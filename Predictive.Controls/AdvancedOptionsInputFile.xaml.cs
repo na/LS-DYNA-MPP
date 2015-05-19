@@ -12,17 +12,22 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
-namespace Predictive.Lsdyna.Mpp.Views
+namespace Predictive.Controls
 {
     /// <summary>
-    /// Interaction logic for AdvancedOptionsView.xaml
+    /// Interaction logic for AdvancedOptionsInputFile.xaml
     /// </summary>
-    public partial class AdvancedOptionsView : UserControl
+    public partial class AdvancedOptionsInputFile : UserControl
     {
-        public AdvancedOptionsView()
+        public AdvancedOptionsInputFile()
         {
             InitializeComponent();
+            LayoutRoot.DataContext = this;
         }
+
+
+
     }
 }
