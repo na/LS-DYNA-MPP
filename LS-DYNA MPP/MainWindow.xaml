@@ -5,6 +5,8 @@
         xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         xmlns:local="clr-namespace:Predictive.Lsdyna.Mpp.Controls" 
         xmlns:local1="clr-namespace:Predictive.Lsdyna.Mpp" 
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:views="clr-namespace:Predictive.Lsdyna.Mpp.Views"
         x:Class="Predictive.Lsdyna.Mpp.MainWindow"
         GlowBrush="{DynamicResource AccentColorBrush}"
         ResizeMode="CanResizeWithGrip"
@@ -13,13 +15,14 @@
         ShowTitleBar="True"
         Title="{Binding AppTitle,ElementName=MainAppWindow}" 
         Height="600" 
-        Width="726" MinWidth="600" MinHeight="500">
+        Width="726" MinWidth="600" MinHeight="500"
+        RightWindowCommandsOverlayBehavior="HiddenTitleBar">
+    
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
             <Style x:Key="PredictiveLogo" TargetType="{x:Type Button}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -74,6 +77,21 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!-- Style to hide tool tips that have an empty content. -->
+            <Style TargetType="ToolTip">
+                <Style.Triggers>
+                    <Trigger Property="Content"
+                 Value="{x:Static System:String.Empty}">
+                        <Setter Property="Visibility"
+                    Value="Collapsed" />
+                    </Trigger>
+                    <Trigger Property="Content"
+                 Value="{x:Null}">
+                        <Setter Property="Visibility"
+                    Value="Collapsed" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Controls:MetroWindow.Resources>
     <Controls:MetroWindow.Flyouts>
@@ -83,7 +101,8 @@
                 <Grid>
                     <TextBox x:Name="InputFileAdvancedOption" Text="Not Yet Implemented" Margin="10"></TextBox>
                 </Grid>
-            </Controls:Flyout>
+            </Controls:Flyout> 
+            <views:SettingsFlyout x:Name="Settings"/>
         </Controls:FlyoutsControl>
     </Controls:MetroWindow.Flyouts>
 
@@ -96,7 +115,7 @@
                         <Rectangle.OpacityMask>
                             <VisualBrush Stretch="Fill"
                          Visual="{StaticResource appbar_save}" />
-                        </Rectangle.OpacityMask>
+                        </Rectangle.OpacityMask>  
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                    VerticalAlignment="Center"
@@ -115,6 +134,20 @@
                     <TextBlock Margin="4 0 0 0"
                    VerticalAlignment="Center"
                    Text="last" />
+                </StackPanel>
+            </Button>
+            <Button Click="ShowSettings">
+                <StackPanel Orientation="Horizontal">
+                    <Rectangle Width="16" Height="16"
+                               Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill"
+                         Visual="{StaticResource appbar_settings}" />
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                    <TextBlock Margin="4 0 0 0"
+                   VerticalAlignment="Center"
+                   Text="settings" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>

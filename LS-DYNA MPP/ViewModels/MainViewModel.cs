@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,10 +61,6 @@ namespace Predictive.Lsdyna.Mpp
             SWVisToggle = ReactiveCommand.Create(canRunMPP);
             SWPlotState = ReactiveCommand.Create(canRunMPP);
             SWASCIIFlush = ReactiveCommand.Create(canRunMPP);
-
-            //_inputFile = new LsmppOption("Input File", "I");
-            //_outputFile = new LsmppOption("Output File", "O");
-            //_restartFile = new LsmppOption("Restart File", "R");
         }
 
         private string ToWorkingDir(string input, string restart)

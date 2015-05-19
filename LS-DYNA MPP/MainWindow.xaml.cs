@@ -51,7 +51,7 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, vm => vm.ExtraMPICommands, v => v.ExtraMPICommands.Text);
             this.Bind(ViewModel, vm => vm.ExtraMPPCommands, v => v.ExtraMPPCommands.Text);
             this.Bind(ViewModel, vm => vm.Affinity, v => v.Affinity.IsChecked);
-            
+
             //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
 
             // Command Binding
@@ -70,7 +70,7 @@ namespace Predictive.Lsdyna.Mpp
 
             this.Processors.Maximum = Environment.ProcessorCount;
             ViewModel.MPI = "mpiexec.exe";
-            ViewModel.Solver = Properties.Settings.Default["mppPath"].ToString();
+            ViewModel.Solver = Properties.Settings.Default.mppPath;
             ViewModel.Processors = Environment.ProcessorCount;
             
             // file dialogs 
@@ -136,7 +136,7 @@ namespace Predictive.Lsdyna.Mpp
                     dlg.FileName = Solver.Text;
                     //dlg.InitialDirectory = Path.GetDirectoryName(Solver.Text);
                     var result = dlg.ShowDialog();
-                    Properties.Settings.Default["mppPath"] = dlg.FileName;
+                    Properties.Settings.Default.mppPath = dlg.FileName;
                     Properties.Settings.Default.Save();
                     solverFilePath.OnNext(dlg.FileName);
                 });
@@ -201,10 +201,11 @@ namespace Predictive.Lsdyna.Mpp
         private void StartCommand()
         {
             var proc = new ProgramHelper("cmd");
-            Properties.Settings.Default["lastWorkingDir"] = this.ViewModel.WorkingDir;
-            Properties.Settings.Default["lastCommand"] = this.ViewModel.mppCommand;
+            Properties.Settings.Default.lastWorkingDir = this.ViewModel.WorkingDir;
+            Properties.Settings.Default.lastCommand = this.ViewModel.mppCommand;
+            Properties.Settings.Default.Save();
             proc.StartProgram(String.Format("/k {0}", this.ViewModel.mppCommand), this.ViewModel.WorkingDir);
-        }
+        } 
 
         private static void LineOutputter(string line)
         {
@@ -248,11 +249,15 @@ namespace Predictive.Lsdyna.Mpp
         private void RunLast(object sender, RoutedEventArgs e)
         {
             var proc = new ProgramHelper("cmd");
-            var lastWorkingDir = Properties.Settings.Default["lastWorkingDir"].ToString();
-            var lastCommand = Properties.Settings.Default["lastCommand"].ToString();
+            var lastWorkingDir = Properties.Settings.Default.lastWorkingDir.ToString();
+            var lastCommand = Properties.Settings.Default.lastCommand.ToString();
             proc.StartProgram(String.Format("/k {0}", lastCommand), lastWorkingDir);
         }
 
+        private void ShowSettings(object sender, RoutedEventArgs e) 
+        {
+            this.ToggleFlyout(1);
+        }
 
         ///http://stackoverflow.com/questions/1600962/displaying-the-build-date
         private DateTime RetrieveLinkerTimestamp()
@@ -300,7 +305,7 @@ namespace Predictive.Lsdyna.Mpp
         {
             _program.StartInfo.FileName = programPath;
             _program.EnableRaisingEvents = true;
-            _program.StartInfo.UseShellExecute = true;
+            _program.StartInfo.UseShellExecute = false;
             _program.StartInfo.RedirectStandardOutput = false;
         }
 
@@ -313,5 +318,4 @@ namespace Predictive.Lsdyna.Mpp
             //ObservableOutput = _program.StandardOutputObservable();
         }
     }
-
 }
