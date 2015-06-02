@@ -12,6 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ReactiveUI;
+using Predictive.Lsdyna.Mpp.ViewModels;
+using Microsoft.Win32;
 
 namespace Predictive.Lsdyna.Mpp.Controls
 {
@@ -23,8 +26,26 @@ namespace Predictive.Lsdyna.Mpp.Controls
         public FileBrowseMetroTextBox()
         {
             InitializeComponent();
-            LayoutRoot.DataContext = this;
+            DataContext = this;
+            
+            BrowseFile = ReactiveCommand.Create();
+            
+            // file dialog 
+            var dlg = new OpenFileDialog();
+
+            this.BrowseFile.Subscribe(_ => {
+                dlg.FileName = FilePath.Text;
+                var result = dlg.ShowDialog();
+                if (result == true)
+                {
+                    this.FilePath.Text = dlg.FileName;
+                    dlg.CheckFileExists = false;
+                }
+            });
+
         }
+
+        public ReactiveCommand<object> BrowseFile { get; protected set; }
 
         public string Watermark
         {

@@ -3,60 +3,170 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace Predictive.Lsdyna.Mpp.Models
 {
-    public class AdvancedOptions
+    public class AdvancedOptions : ReactiveObject
     {
         private LsmppOption _interfaceSegment;
+        public LsmppOption InterfaceSegment
+        {
+            get { return _interfaceSegment; }
+            set { this.RaiseAndSetIfChanged(ref _interfaceSegment, value); }
+        }
         private LsmppOption _vdaGeometry;
+        public LsmppOption VdaGeometry
+        {
+            get { return _vdaGeometry; }
+            set { this.RaiseAndSetIfChanged(ref _vdaGeometry, value); }
+        }
         private LsmppOption _cal3dInput;
+        public LsmppOption Cal3dInput
+        {
+            get { return _cal3dInput; }
+            set { this.RaiseAndSetIfChanged(ref _cal3dInput, value); }
+        }
         private LsmppOption _topaz3dfile;
+        public LsmppOption Topaz3dfile
+        {
+            get { return _topaz3dfile; }
+            set { this.RaiseAndSetIfChanged(ref _topaz3dfile, value); }
+        }
         private LsmppOption _stressInitialization;
+        public LsmppOption StressInitialization
+        {
+            get { return _stressInitialization; }
+            set { this.RaiseAndSetIfChanged(ref _stressInitialization, value); }
+        }
         private LsmppOption _mappingInputFile;
+        public LsmppOption MappingInputFile
+        {
+            get { return _mappingInputFile; }
+            set { this.RaiseAndSetIfChanged(ref _mappingInputFile, value); }
+        }
         private LsmppOption _graphics;
+        public LsmppOption Graphics
+        {
+            get { return _graphics; }
+            set { this.RaiseAndSetIfChanged(ref _graphics, value); }
+        }
         private LsmppOption _timeHistories;
+        public LsmppOption TimeHistories
+        {
+            get { return _timeHistories; }
+            set { this.RaiseAndSetIfChanged(ref _timeHistories, value); }
+        }
         private LsmppOption _interfaceForce;
+        public LsmppOption InterfaceForce
+        {
+            get { return _interfaceForce; }
+            set { this.RaiseAndSetIfChanged(ref _interfaceForce, value); }
+        }
         private LsmppOption _fsiInterfaceForce;
+        public LsmppOption FsiInterfaceForce
+        {
+            get { return _fsiInterfaceForce; }
+            set { this.RaiseAndSetIfChanged(ref _fsiInterfaceForce, value); }
+        }
         private LsmppOption _dynamicRelaxation;
+        public LsmppOption DynamicRelaxation
+        {
+            get { return _dynamicRelaxation; }
+            set { this.RaiseAndSetIfChanged(ref _dynamicRelaxation, value); }
+        }
         private LsmppOption _acousticOuput;
+        public LsmppOption AcousticOuput
+        {
+            get { return _acousticOuput; }
+            set { this.RaiseAndSetIfChanged(ref _acousticOuput, value); }
+        }
         private LsmppOption _demInterfaceForce;
+        public LsmppOption DemInterfaceForce
+        {
+            get { return _demInterfaceForce; }
+            set { this.RaiseAndSetIfChanged(ref _demInterfaceForce, value); }
+        }
         private LsmppOption _inputEcho;
+        public LsmppOption InputEcho
+        {
+            get { return _inputEcho; }
+            set { this.RaiseAndSetIfChanged(ref _inputEcho, value); }
+        }
         private LsmppOption _restartDump;
+        public LsmppOption RestartDump
+        {
+            get { return _restartDump; }
+            set { this.RaiseAndSetIfChanged(ref _restartDump, value); }
+        }
         private LsmppOption _interfaceSegmentSave;
+        public LsmppOption InterfaceSegmentSave
+        {
+            get { return _interfaceSegmentSave; }
+            set { this.RaiseAndSetIfChanged(ref _interfaceSegmentSave, value); }
+        }
         private LsmppOption _remapCrackDatabase;
+        public LsmppOption RemapCrackDatabase
+        {
+            get { return _remapCrackDatabase; }
+            set { this.RaiseAndSetIfChanged(ref _remapCrackDatabase, value); }
+        }
         private LsmppOption _runningRestartDump;
+        public LsmppOption RunningRestartDump
+        {
+            get { return _runningRestartDump; }
+            set { this.RaiseAndSetIfChanged(ref _runningRestartDump, value); }
+        }
         private LsmppOption _propertyOutput;
+        public LsmppOption PropertyOutput
+        {
+            get { return _propertyOutput; }
+            set { this.RaiseAndSetIfChanged(ref _propertyOutput, value); }
+        }
         private LsmppOption _mappingOutputFile;
+        public LsmppOption MappingOutputFile
+        {
+            get { return _mappingOutputFile; }
+            set { this.RaiseAndSetIfChanged(ref _mappingOutputFile, value); }
+        }
+
+        ReactiveList<LsmppOption> Options = new ReactiveList<LsmppOption>();
 
         public AdvancedOptions()
         {
-            _acousticOuput = new LsmppOption("Acoustic output", "BEM");
-            _interfaceSegment = new LsmppOption("Interface segment", "L");     
-            _vdaGeometry = new LsmppOption("Vda geometry","V");
-            _cal3dInput  = new LsmppOption("CAL3D input","Y");
-            _topaz3dfile = new LsmppOption("TOPAZ3D file", "T");
-            _stressInitialization = new LsmppOption("Stress initialization", "M");
-            _mappingInputFile = new LsmppOption("Mapping input file", "MAP");
-            _graphics = new LsmppOption("Graphics", "G", "d3plot");
-            _timeHistories = new LsmppOption("Time histories", "F","d3thdt");
-            _interfaceForce = new LsmppOption("Interface force", "S");
-            _fsiInterfaceForce = new LsmppOption("FSI interface force", "H");
-            _dynamicRelaxation = new LsmppOption("Dynamic relaxation", "B", "d3drfl");
-            _acousticOuput = new LsmppOption("Acoustic Output", "BEM");
-            _demInterfaceForce = new LsmppOption("DEM interface force", "DEM");
-            _inputEcho = new LsmppOption("Input echo","E");
-            _restartDump = new LsmppOption("Restart dump", "D", "d3dump");
-            _interfaceSegmentSave = new LsmppOption("Interface segment save", "Z");
-            _remapCrackDatabase = new LsmppOption("Remap, Crack database", "Q", "remap");
-            _runningRestartDump = new LsmppOption("Running restart dump", "A", "runrsf");
-            _propertyOutput = new LsmppOption("Property output", "D3PROP", "d3prop");
-            _mappingOutputFile = new LsmppOption("Mapping output file", "MAP");
+            AcousticOuput = new LsmppOption("Acoustic output", "BEM=");
+            InterfaceSegment = new LsmppOption("Interface segment", "L=");     
+            VdaGeometry = new LsmppOption("Vda geometry","V=");
+            Cal3dInput  = new LsmppOption("CAL3D input","Y=");
+            Topaz3dfile = new LsmppOption("TOPAZ3D file", "T=");
+            StressInitialization = new LsmppOption("Stress initialization", "M=");
+            MappingInputFile = new LsmppOption("Mapping input file", "MAP=");
+            Graphics = new LsmppOption("Graphics", "G=", "d3plot");
+            TimeHistories = new LsmppOption("Time histories", "F=","d3thdt");
+            InterfaceForce = new LsmppOption("Interface force", "S=");
+            FsiInterfaceForce = new LsmppOption("FSI interface force", "H=");
+            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=", "d3drfl");
+            AcousticOuput = new LsmppOption("Acoustic Output", "BEM=");
+            DemInterfaceForce = new LsmppOption("DEM interface force", "DEM=");
+            InputEcho = new LsmppOption("Input echo","E=");
+            RestartDump = new LsmppOption("Restart dump", "D=", "d3dump");
+            InterfaceSegmentSave = new LsmppOption("Interface segment save", "Z=");
+            RemapCrackDatabase = new LsmppOption("Remap, Crack database", "Q=", "remap");
+            RunningRestartDump = new LsmppOption("Running restart dump", "A=", "runrsf");
+            PropertyOutput = new LsmppOption("Property output", "D3PROP=", "d3prop");
+            MappingOutputFile = new LsmppOption("Mapping output file", "MAP=");
+            this.GetType().GetProperties()
+                .Where(pi => pi.PropertyType == typeof(LsmppOption))
+                .Select(pi => (LsmppOption)pi.GetValue(this))
+                .ToList()
+                .ForEach(x => Options.Add(x));
         }
 
-        public LsmppOption InterfaceSegment
+        public override string ToString()
         {
-            get { return _interfaceSegment;}
+            var options = Options.Where(x=>x.IsActive).Select(x=>x.ToString());
+            return string.Join(" ", options);
         }
+
     }
 }

@@ -37,22 +37,26 @@ namespace Predictive.Lsdyna.Mpp
 
         public MainWindow()
         {
+
             ViewModel = new MainViewModel();
             DataContext = ViewModel;
             InitializeComponent();
 
             // Data binding
-            this.Bind(ViewModel, vm => vm.InputFile, v => v.InputFile.Text);
-            this.Bind(ViewModel, vm => vm.OutputFile, v => v.OutputFile.Text);
-            this.Bind(ViewModel, vm => vm.RestartFile, v => v.RestartFile.Text);
-            this.Bind(ViewModel, vm => vm.Solver, v => v.Solver.Text);
-            this.Bind(ViewModel, vm => vm.Memory, v => v.Memory.Text);
-            this.Bind(ViewModel, vm => vm.Memory2, v => v.Memory2.Text);
-            this.Bind(ViewModel, vm => vm.ExtraMPICommands, v => v.ExtraMPICommands.Text);
-            this.Bind(ViewModel, vm => vm.ExtraMPPCommands, v => v.ExtraMPPCommands.Text);
-            this.Bind(ViewModel, vm => vm.Affinity, v => v.Affinity.IsChecked);
-
-            //this.OneWayBind(ViewModel, x => x.Processors, x => x.Processors.Value);
+            this.Bind(ViewModel, vm => vm.InputFile.Value, v => v.InputFile.Text);
+            this.Bind(ViewModel, vm => vm.OutputFile.Value, v => v.OutputFile.Text);
+            this.Bind(ViewModel, vm => vm.RestartFile.Value, v => v.RestartFile.Text);
+            this.Bind(ViewModel, vm => vm.Solver.Value, v => v.Solver.Text);
+            this.Bind(ViewModel, vm => vm.Memory.Value, v => v.Memory.Text);
+            this.Bind(ViewModel, vm => vm.Memory2.Value, v => v.Memory2.Text);
+            this.Bind(ViewModel, vm => vm.ExtraMPICommands.Value, v => v.ExtraMPICommands.Text);
+            this.Bind(ViewModel, vm => vm.ExtraMPPCommands.Value, v => v.ExtraMPPCommands.Text);
+            this.Bind(ViewModel, vm => vm.Affinity.IsActive, v => v.Affinity.IsChecked);
+            this.Bind(ViewModel, vm => vm.LicenseFile.Value, v => v.Settings.LocalLicenseFile.Text);
+            this.Bind(ViewModel, vm => vm.LicenseType.Value, v => v.Settings.LicenseType.SelectedValue);
+            this.Bind(ViewModel, vm => vm.LicenseServer.Value, v => v.Settings.LicenseServer.Text);
+            this.Bind(ViewModel, vm => vm.LicensePort.Value, v => v.Settings.LicensePort.Text);
+            this.OneWayBind(ViewModel, x => x.Processors.Value, x => x.Processors.Value); 
 
             // Command Binding
             this.BindCommand(ViewModel, vm => vm.BrowseInputFile, v => v.InputFileButton);
@@ -69,9 +73,9 @@ namespace Predictive.Lsdyna.Mpp
             this.BindCommand(ViewModel, vm => vm.SWVisToggle, v => v.SWVisToggleButton);
 
             this.Processors.Maximum = Environment.ProcessorCount;
-            ViewModel.MPI = "mpiexec.exe";
-            ViewModel.Solver = Properties.Settings.Default.mppPath;
-            ViewModel.Processors = Environment.ProcessorCount;
+            ViewModel.MpiExe.Value = "mpiexec.exe";
+            ViewModel.Solver.Value = Properties.Settings.Default.mppPath;
+            ViewModel.Processors.Value = Environment.ProcessorCount.ToString();
             
             // file dialogs 
             var dlg = new OpenFileDialog();
@@ -140,7 +144,7 @@ namespace Predictive.Lsdyna.Mpp
                     Properties.Settings.Default.Save();
                     solverFilePath.OnNext(dlg.FileName);
                 });
-            solverFilePath.Subscribe(x => this.ViewModel.Solver = x);
+            solverFilePath.Subscribe(x => this.ViewModel.Solver.Value = x);
 
             // Run Command
             this.WhenAnyObservable(x => x.ViewModel.Run)
@@ -187,7 +191,7 @@ namespace Predictive.Lsdyna.Mpp
             get { return ViewModel; }
             set { ViewModel = (MainViewModel)value; }
         }
-        
+
         private static string FindMPI()
         {
             var possiblePaths = new string[]{
@@ -205,7 +209,9 @@ namespace Predictive.Lsdyna.Mpp
             Properties.Settings.Default.lastCommand = this.ViewModel.mppCommand;
             Properties.Settings.Default.Save();
             proc.StartProgram(String.Format("/k {0}", this.ViewModel.mppCommand), this.ViewModel.WorkingDir);
-        } 
+        }
+
+        public IValueConverter PathConverter { get; set; }
 
         private static void LineOutputter(string line)
         {
@@ -316,6 +322,18 @@ namespace Predictive.Lsdyna.Mpp
             _program.Start();
 
             //ObservableOutput = _program.StandardOutputObservable();
+        }
+    }
+
+    public class PathLongtoShortConverter : IValueConverter
+    {
+        public object Convert(object value, Type type, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value.ToString().GetShortPathName();
+        }
+        public object ConvertBack(object value, Type type, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value.ToString().GetLongPathName();
         }
     }
 }

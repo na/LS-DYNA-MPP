@@ -3,28 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reactive.Linq;
+using ReactiveUI;
+using Predictive.Lsdyna.Mpp;
+using Predictive.StringExtensions;
 
 namespace Predictive.Lsdyna.Mpp.Models
 {
-    public class LsmppOption
+    public class LsmppOption : ReactiveObject, IOption
     {
-        public string Flag { get; private set; }
-        public string Name { get; private set; }
-        public string Option { get; set; }
-        public string HelpText { get; set; }
+        private string _flag;
+        public string Flag
+        {
+            get { return _flag; }
+            set { this.RaiseAndSetIfChanged(ref _flag, value); }
+        }
 
-        public LsmppOption(string name, string flag, string option = "", string helpText="")
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { this.RaiseAndSetIfChanged(ref _name, value); }
+        }
+
+        private string _option;
+        public string Value
+        {
+            get { return _option; }
+            set { this.RaiseAndSetIfChanged(ref _option, value); }
+        }
+
+        private string _helpText;
+        public string HelpText
+        {
+            get { return _helpText; }
+            set { this.RaiseAndSetIfChanged(ref _helpText, value); }
+        }
+
+        private bool _isActive;
+        public bool IsActive
+        {
+            get { return _isActive; }
+            set { this.RaiseAndSetIfChanged(ref _isActive, value); }
+        }
+
+        public LsmppOption(string name, string flag, string option ="", string helpText="", bool isActive=false)
         {
             Flag = flag;
             Name = name;
             HelpText = helpText;
-            Option = option;
+            Value = option;
+            IsActive = isActive;
+
+            // If the Option get set to empty or whitespace set IsActive to false
+            this.WhenAnyValue(x => x.Value).Where(x => String.IsNullOrWhiteSpace(x)).Subscribe(_ => this.IsActive=false);
         }
 
         public override string ToString()
         {
-            // this is ugly but it is time to get beta out.
-            return string.IsNullOrEmpty(Option) ? "" : String.Format(" {0}={1}", Flag, Option);
+            return string.IsNullOrEmpty(Value) ? "" : String.Format("{0}{1}", Flag, Value.GetShortPathName());
         }
     }
 }

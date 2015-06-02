@@ -6,4 +6,9 @@ namespace Predictive.Lsdyna.Mpp
     {
         IObservable<MainViewModel> WriteSenseSwitch(string sw);
     }
+
+    public interface IOption
+    {
+        bool IsActive { get; set; }
+    }
 }

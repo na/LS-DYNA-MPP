@@ -17,7 +17,7 @@ namespace Predictive.Lsdyna.Mpp.Views
     {
         public SettingsFlyout()
         {
-            ViewModel = new SettingsViewModel();
+            //ViewModel = new SettingsViewModel();
             DataContext = ViewModel;
             InitializeComponent();
 
@@ -29,10 +29,10 @@ namespace Predictive.Lsdyna.Mpp.Views
             this.Bind(ViewModel, vm => vm.IsLocalLicense, v => v.LocalLicenseFile.IsEnabled);
             this.Bind(ViewModel, vm => vm.LocalLicenseFile, v => v.LocalLicenseFile.Text);
 
-            this.LicenseType.SelectedValue = System.Environment.GetEnvironmentVariable("LSTC_LICENSE");
-            this.LicenseServer.Text = System.Environment.GetEnvironmentVariable("LSTC_LICENSE_SERVER");
-            this.LicensePort.Text = System.Environment.GetEnvironmentVariable("LSTC_LICENSE_SERVER_PORT");
-            this.LocalLicenseFile.Text = System.Environment.GetEnvironmentVariable("LSTC_FILE");        
+            this.LicenseType.SelectedValue = Properties.Settings.Default.LSTC_LICENSE;
+            this.LicenseServer.Text = Properties.Settings.Default.LSTC_LICENSE_SERVER;
+            this.LicensePort.Text = Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT;
+            this.LocalLicenseFile.Text = Properties.Settings.Default.LSTC_FILE;        
         }
 
         public SettingsViewModel ViewModel

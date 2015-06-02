@@ -20,8 +20,8 @@ namespace Predictive.Lsdyna.Mpp
         {
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense );
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(0)).ToProperty(this, x => x.IsLocalLicense, out _isLocalLicense);
-            this.WhenAnyValue(x => x.LicenseServer).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_LICENSE_SERVER",x,EnvironmentVariableTarget.User));
-            this.WhenAnyValue(x => x.LocalLicenseFile).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_FILE", x, EnvironmentVariableTarget.User));
+            //this.WhenAnyValue(x => x.LicenseServer).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_LICENSE_SERVER",x,EnvironmentVariableTarget.User));
+            //this.WhenAnyValue(x => x.LocalLicenseFile).Throttle(TimeSpan.FromMilliseconds(400)).Where(x => !string.IsNullOrEmpty(x)).Subscribe(x => System.Environment.SetEnvironmentVariable("LSTC_FILE", x, EnvironmentVariableTarget.User));
         }
 
         private int _licenseTypeIndex;
@@ -62,6 +62,26 @@ namespace Predictive.Lsdyna.Mpp
         {
             get { return _localLicenseFile; }
             set { this.RaiseAndSetIfChanged(ref _localLicenseFile, value); }
+        }
+
+        public override string ToString()
+        {
+            if (this.IsLocalLicense)
+            {
+                return String.Format("-ENV lstc_license local -ENV lstc_file {0}", this.LocalLicenseFile);
+            } 
+            else if (this.IsNetworkLicense && String.IsNullOrEmpty(this.LicensePort)) 
+            {
+                return string.Format("-ENV lstc_license network -ENV lstc_license_server {0}", this.LicenseServer);
+            }
+            else if (this.IsNetworkLicense && !String.IsNullOrEmpty(this.LicensePort))
+            {
+                return string.Format("-ENV lstc_license network -ENV lstc_license_server {0} -ENV lstc_license_port {1}", this.LicenseServer, this.LicensePort);
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 }

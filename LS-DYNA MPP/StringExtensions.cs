@@ -44,7 +44,7 @@ namespace Predictive.StringExtensions
             {
                 return str;
             } else {
-                return string.Format("{0}={1}", flag, str);
+                return string.Format("{0}{1}", flag, str);
             }
         }
 
@@ -64,5 +64,22 @@ namespace Predictive.StringExtensions
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         private static extern Int32 GetShortPathName(String path, StringBuilder shortPath, Int32 shortPathLength);
+
+        public static string GetLongPathName(this string str)
+        {
+            if (!String.IsNullOrEmpty(str))
+            {
+                StringBuilder longPath = new StringBuilder(str.Length + 1);
+                if (0 == GetLongPathName(str, longPath, longPath.Capacity))
+                {
+                    return str;
+                }
+                return longPath.ToString();
+            }
+            return "";
+        }
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        private static extern Int32 GetLongPathName(String path, StringBuilder shortPath, Int32 shortPathLength);
     }
 }

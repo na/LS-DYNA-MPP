@@ -58,5 +58,53 @@ namespace Predictive.Lsdyna.Mpp.Properties {
                 this["lastCommand"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LSTC_LICENSE {
+            get {
+                return ((string)(this["LSTC_LICENSE"]));
+            }
+            set {
+                this["LSTC_LICENSE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LSTC_FILE {
+            get {
+                return ((string)(this["LSTC_FILE"]));
+            }
+            set {
+                this["LSTC_FILE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LSTC_LICENSE_SERVER {
+            get {
+                return ((string)(this["LSTC_LICENSE_SERVER"]));
+            }
+            set {
+                this["LSTC_LICENSE_SERVER"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LSTC_LICENSE_SERVER_PORT {
+            get {
+                return ((string)(this["LSTC_LICENSE_SERVER_PORT"]));
+            }
+            set {
+                this["LSTC_LICENSE_SERVER_PORT"] = value;
+            }
+        }
     }
 }

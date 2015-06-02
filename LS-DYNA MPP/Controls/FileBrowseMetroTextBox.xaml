@@ -7,8 +7,9 @@
              mc:Ignorable="d"
              Height="Auto">
     <Grid x:Name="LayoutRoot">
-        <TextBox 
+        <TextBox x:Name="FilePath"
             Style="{StaticResource OpenFileMetroTextBox}" 
-            Controls:TextBoxHelper.Watermark="{Binding Path=Watermark}" Controls:TextBoxHelper.UseFloatingWatermark="True" />
+            Controls:TextBoxHelper.Watermark="{Binding Watermark}"
+            Controls:TextBoxHelper.ButtonCommand="{Binding BrowseFile}"/>
     </Grid>
 </UserControl>
