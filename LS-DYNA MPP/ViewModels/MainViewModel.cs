@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Win32;
-using System.Reactive.Subjects;
-using ReactiveUI;
-using System.Diagnostics;
-using System.IO;
-using System.Reactive.Linq;
 using Predictive.Lsdyna.Mpp.Models;
 using Predictive.Lsdyna.Mpp.ViewModels;
 using Predictive.StringExtensions;
+using ReactiveUI;
+using System;
+using System.Linq;
+using System.Reactive.Linq;
 //using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp

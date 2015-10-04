@@ -1,12 +1,6 @@
 ﻿using MahApps.Metro.Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
 using ReactiveUI;
-using Predictive.Lsdyna.Mpp.Models;
+using System.Windows;
 
 
 namespace Predictive.Lsdyna.Mpp.Views

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reactive.Linq;
+﻿using Predictive.StringExtensions;
 using ReactiveUI;
-using Predictive.Lsdyna.Mpp;
-using Predictive.StringExtensions;
+using System;
+using System.Reactive.Linq;
 
 namespace Predictive.Lsdyna.Mpp.Models
 {

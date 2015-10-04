@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Predictive.Lsdyna.Mpp.Models;
 using ReactiveUI;
-using Predictive.Lsdyna.Mpp.Models;
 
 namespace Predictive.Lsdyna.Mpp.ViewModels
 {
