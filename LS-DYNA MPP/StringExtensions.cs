@@ -28,9 +28,7 @@ namespace Predictive.StringExtensions
         /// <returns>string</returns>
         public static string FileNameWithoutExtension(this String str)
         {
-            //Debug.WriteLine("String: " + str);
             return string.IsNullOrWhiteSpace(str) ? str : Path.GetFileNameWithoutExtension(str);
-            //return "Hello World";
         }
 
         /// <summary>

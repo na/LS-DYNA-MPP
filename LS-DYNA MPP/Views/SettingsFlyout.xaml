@@ -28,7 +28,7 @@
         </ComboBox>
         
         <Label Content="Local File" Grid.Row="1" Margin="6"/>
-        <TextBox x:Name="LocalLicenseFile" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" Margin="6" />
+        <TextBox x:Name="LicenseFile" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" Margin="6" />
         
         <Label Content="License Server" Grid.Row="2" Margin="6"/>
         <TextBox x:Name="LicenseServer" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Margin="6" />

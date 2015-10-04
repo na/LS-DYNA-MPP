@@ -26,11 +26,11 @@ namespace Predictive.Lsdyna.Mpp.Models
             set { this.RaiseAndSetIfChanged(ref _name, value); }
         }
 
-        private string _option;
+        private string _value;
         public string Value
         {
-            get { return _option; }
-            set { this.RaiseAndSetIfChanged(ref _option, value); }
+            get { return _value; }
+            set { this.RaiseAndSetIfChanged(ref _value, value); }
         }
 
         private string _helpText;
@@ -55,7 +55,7 @@ namespace Predictive.Lsdyna.Mpp.Models
             Value = option;
             IsActive = isActive;
 
-            // If the Option get set to empty or whitespace set IsActive to false
+            // If the Option gets set to empty or whitespace set IsActive to false
             this.WhenAnyValue(x => x.Value).Where(x => String.IsNullOrWhiteSpace(x)).Subscribe(_ => this.IsActive=false);
         }
 

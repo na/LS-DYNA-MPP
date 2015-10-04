@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using ReactiveUI;
+using Predictive.Lsdyna.Mpp.Models;
 
 
 namespace Predictive.Lsdyna.Mpp.Views
@@ -17,22 +18,18 @@ namespace Predictive.Lsdyna.Mpp.Views
     {
         public SettingsFlyout()
         {
-            //ViewModel = new SettingsViewModel();
+            ViewModel = new SettingsViewModel();
             DataContext = ViewModel;
             InitializeComponent();
 
-            this.Bind(ViewModel, vm => vm.LicenseServer, v => v.LicenseServer.Text);
-            this.Bind(ViewModel, vm => vm.LicensePort, v => v.LicensePort.Text);
+            this.Bind(ViewModel, vm => vm.LicenseServer.Value, v => v.LicenseServer.Text);
+            this.Bind(ViewModel, vm => vm.LicensePort.Value, v => v.LicensePort.Text);
             this.Bind(ViewModel, vm => vm.LicenseTypeIndex, v => v.LicenseType.SelectedIndex);
             this.Bind(ViewModel, vm => vm.IsNetworkLicense, v => v.LicenseServer.IsEnabled);
             this.Bind(ViewModel, vm => vm.IsNetworkLicense, v => v.LicensePort.IsEnabled);
-            this.Bind(ViewModel, vm => vm.IsLocalLicense, v => v.LocalLicenseFile.IsEnabled);
-            this.Bind(ViewModel, vm => vm.LocalLicenseFile, v => v.LocalLicenseFile.Text);
-
-            this.LicenseType.SelectedValue = Properties.Settings.Default.LSTC_LICENSE;
-            this.LicenseServer.Text = Properties.Settings.Default.LSTC_LICENSE_SERVER;
-            this.LicensePort.Text = Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT;
-            this.LocalLicenseFile.Text = Properties.Settings.Default.LSTC_FILE;        
+            this.Bind(ViewModel, vm => vm.IsLocalLicense, v => v.LicenseFile.IsEnabled);
+            this.Bind(ViewModel, vm => vm.LicenseFile.Value, v => v.LicenseFile.Text);
+            this.Bind(ViewModel, vm => vm.LicenseType.Value, v => v.LicenseType.SelectedValue);
         }
 
         public SettingsViewModel ViewModel

@@ -37,10 +37,9 @@ namespace Predictive.Lsdyna.Mpp
 
         public MainWindow()
         {
-
-            ViewModel = new MainViewModel();
-            DataContext = ViewModel;
             InitializeComponent();
+            ViewModel = new MainViewModel(AdvancedOptions.ViewModel, Settings.ViewModel);
+            DataContext = ViewModel;
 
             // Data binding
             this.Bind(ViewModel, vm => vm.InputFile.Value, v => v.InputFile.Text);
@@ -52,11 +51,7 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, vm => vm.ExtraMPICommands.Value, v => v.ExtraMPICommands.Text);
             this.Bind(ViewModel, vm => vm.ExtraMPPCommands.Value, v => v.ExtraMPPCommands.Text);
             this.Bind(ViewModel, vm => vm.Affinity.IsActive, v => v.Affinity.IsChecked);
-            this.Bind(ViewModel, vm => vm.LicenseFile.Value, v => v.Settings.LocalLicenseFile.Text);
-            this.Bind(ViewModel, vm => vm.LicenseType.Value, v => v.Settings.LicenseType.SelectedValue);
-            this.Bind(ViewModel, vm => vm.LicenseServer.Value, v => v.Settings.LicenseServer.Text);
-            this.Bind(ViewModel, vm => vm.LicensePort.Value, v => v.Settings.LicensePort.Text);
-            this.OneWayBind(ViewModel, x => x.Processors.Value, x => x.Processors.Value); 
+            this.Bind(ViewModel, vm => vm.Processors.Value, v => v.Processors.Value); 
 
             // Command Binding
             this.BindCommand(ViewModel, vm => vm.BrowseInputFile, v => v.InputFileButton);
@@ -99,7 +94,9 @@ namespace Predictive.Lsdyna.Mpp
                           //inputFilePath.OnNext(dlg.FileName);
                           this.InputFile.Text = dlg.FileName;
                           dlg.CheckFileExists = false;
-                          this.OutputFile.Text = dlg.FileName.Directory() + "\\d3hsp";
+                          var output = dlg.FileName.Directory() + "\\d3hsp";
+                          File.Create(output);
+                          this.OutputFile.Text = output;
                       }                    
                   });
             //inputFilePath.Subscribe(x => this.ViewModel.InputFile = x);
@@ -116,7 +113,9 @@ namespace Predictive.Lsdyna.Mpp
                     if (result == true)
                     {
                         this.RestartFile.Text = String.Format("{0}\\{1}", dlg.FileName.Directory(), dlg.FileName.FileNameWithoutExtension());
-                        this.OutputFile.Text = dlg.FileName.Directory() + "\\d3hsp";
+                        var output = dlg.FileName.Directory() + "\\d3hsp";
+                        File.Create(output);
+                        this.OutputFile.Text = output;
                     }
                 });
 
@@ -250,6 +249,11 @@ namespace Predictive.Lsdyna.Mpp
         private void LaunchPEWebsite(object sender, RoutedEventArgs e)
         {
             Process.Start("http://www.predictiveengineering.com/"); ;
+        }
+
+        private void LaunchHelp(object sender, RoutedEventArgs e)
+        {
+            Process.Start("http://www.predictiveengineering.com/content/free-ls-dyna-mpp-program-manager-windows"); ;
         }
 
         private void RunLast(object sender, RoutedEventArgs e)

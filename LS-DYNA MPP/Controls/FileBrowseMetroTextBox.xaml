@@ -9,6 +9,8 @@
     <Grid x:Name="LayoutRoot">
         <TextBox x:Name="FilePath"
             Style="{StaticResource OpenFileMetroTextBox}" 
+            Text="{Binding Text}"
+            TextWrapping="{Binding TextWrapping}"
             Controls:TextBoxHelper.Watermark="{Binding Watermark}"
             Controls:TextBoxHelper.ButtonCommand="{Binding BrowseFile}"/>
     </Grid>

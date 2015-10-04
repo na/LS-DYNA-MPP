@@ -1,27 +1,22 @@
-﻿<controls:Flyout
+﻿<controls:Flyout x:Class="Predictive.Lsdyna.Mpp.Views.AdvancedOptionsFlyout"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-             xmlns:Views="clr-namespace:Predictive.Lsdyna.Mpp.Views"
-             xmlns:Controls="clr-namespace:Predictive.Lsdyna.Mpp.Controls" x:Class="Predictive.Lsdyna.Mpp.Views.AdvancedOptionsFlyout"
+             xmlns:Controls="clr-namespace:Predictive.Lsdyna.Mpp.Controls" 
              mc:Ignorable="d" 
              d:DesignHeight="600"
              Position="Right"
              Header="Advanced Settings"
              Width="600">
     <StackPanel x:Name="AdvancedOptionsStackPanel" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" Margin="6">
-        <StackPanel.Resources>
-            <Views:ExpanderToBooleanConverter x:Key="ExpanderToBooleanConverter" />
-        </StackPanel.Resources>
 
-        <Expander Header="Input File Name(s)" Grid.Row="0" IsExpanded="{Binding SelectedExpander, ConverterParameter=1, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}">
+        <Expander x:Name="InputExpander" Header="Input File Name(s)" Grid.Row="0" IsExpanded="True">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -33,29 +28,22 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Content="Interface Segment L=" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="InterfaceSegment" TextWrapping="Wrap" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="InterfaceSegment" Grid.Column="1" Margin="6"/>
                 <Label Content="Vda Geometry V=" Grid.Row="1" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="VdaGeometry" Grid.Row="1" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="1" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="VdaGeometry" Grid.Row="1" Grid.Column="1" Margin="6"/>
                 <Label Content="CAL3D Input Y=" Grid.Row="2" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="CAL3DInput" Grid.Row="2" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="2" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="CAL3DInput" Grid.Row="2" Grid.Column="1" Margin="6"/>
                 <Label Content="TOPAZ3D File T=" Grid.Row="3" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="TOPAZ3DFile" Grid.Row="3" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="3" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="TOPAZ3DFile" Grid.Row="3" Grid.Column="1" Margin="6"/>
                 <Label Content="Stress Initialization M=" Grid.Row="4" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="StressInitialization" Grid.Row="4" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="4" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="StressInitialization" Grid.Row="4" Grid.Column="1" Margin="6"/>
                 <Label Content="Mapping Input File MAP=" Grid.Row="5" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="MappingInputFile" Grid.Row="5" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="5" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="MappingInputFile" Grid.Row="5" Grid.Column="1" Margin="6"/>
                 <Label Content="Root File W=" Grid.Row="6" Margin="6" HorizontalAlignment="Right"/>
-                <TextBox x:Name="RootFile" Grid.Row="6" Grid.Column="1" Margin="6"/>
-                <Button Content="Browse" Grid.Row="6" Grid.Column="2" Margin="6" Style="{DynamicResource SquareButtonStyle}" Padding="10,6"/>
+                <Controls:FileBrowseMetroTextBox x:Name="RootFile" Grid.Row="6" Grid.Column="1" Margin="6"/>
             </Grid>
         </Expander>
-        <Expander Header="Output File Names(s)" IsExpanded="{Binding SelectedExpander, ConverterParameter=2, Converter={StaticResource ExpanderToBooleanConverter}, Mode=TwoWay}">
+        <Expander x:Name="OutputExpander" Header="Output File Names(s)">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -73,7 +61,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Border BorderThickness="0 0 1 0" BorderBrush="Black" Grid.ColumnSpan="2" Grid.RowSpan="7" SnapsToDevicePixels="True"/>
-                <Label Content="Graphics G=" Margin="0,6,6,6" HorizontalAlignment="Right"/>
+                <Label Content="Graphics G=" Margin="0,6,6,6" HorizontalAlignment="Right"/>          
                 <TextBox x:Name="Graphics"  Grid.Column="1" Margin="6,6,12,6"/>
                 <Label Content="Time Histories F=" Grid.Row="1" Margin="0,6,6,6" HorizontalAlignment="Right"/>
                 <TextBox x:Name="TimeHistories" Grid.Row="1" Grid.Column="1" Margin="6,6,12,6"/>
@@ -103,6 +91,5 @@
                 <TextBox x:Name="MappingOutputFile" Grid.Row="6" Grid.Column="3" Margin="6"/>
             </Grid>
         </Expander>
-        <Controls:FileBrowseMetroTextBox Height="100" VerticalAlignment="Bottom" Watermark="This is a test"/>
     </StackPanel>
 </controls:Flyout>

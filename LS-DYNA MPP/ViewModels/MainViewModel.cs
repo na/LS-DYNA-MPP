@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reactive.Linq;
 using Predictive.Lsdyna.Mpp.Models;
+using Predictive.Lsdyna.Mpp.ViewModels;
 using Predictive.StringExtensions;
 //using Predictive.ProcessExtensions;
 
@@ -17,9 +18,9 @@ namespace Predictive.Lsdyna.Mpp
 {
     public class MainViewModel : ReactiveObject
     {
-        public MainViewModel()
+        public MainViewModel(AdvancedOptionsViewModel AdvancedOptions, SettingsViewModel Settings)
         {
-
+            
             Options = new ReactiveList<LsmppOption>() { ChangeTrackingEnabled = true };
             
             // Track changes to options and when an option value changes set it to active
@@ -33,16 +34,12 @@ namespace Predictive.Lsdyna.Mpp
             Options.Add(MpiExe);
             Processors = new LsmppOption("Processors", "-np ");
             Options.Add(Processors);
-            Affinity = new LsmppOption("Affinity", "", "-Affinity");
+            Affinity = new LsmppOption("Affinity", "", "-affinity");
             Options.Add(Affinity);
-            LicenseType = new LsmppOption("License Type", "-ENV lstc_license ");
-            Options.Add(LicenseType);
-            LicenseFile = new LsmppOption("Local License File", "-ENV lstc_file ");
-            Options.Add(LicenseFile);
-            LicenseServer = new LsmppOption("License Server", "-ENV lstc_license_server ");
-            Options.Add(LicenseServer);
-            LicensePort = new LsmppOption("Network License Port", "-ENV lstc_license_port ");
-            Options.Add(LicensePort);
+            Options.Add(Settings.LicenseType);
+            Options.Add(Settings.LicenseFile);
+            Options.Add(Settings.LicenseServer);
+            Options.Add(Settings.LicensePort);
             ExtraMPICommands = new LsmppOption("Extra MPI commands", "");
             Options.Add(ExtraMPICommands);
             Solver = new LsmppOption("Solver", "");
@@ -61,55 +58,32 @@ namespace Predictive.Lsdyna.Mpp
             Options.Add(ExtraMPPCommands);
 
             // Advanced Options
-            AcousticOuput = new LsmppOption("Acoustic output", "BEM=");
-            Options.Add(AcousticOuput);
-            InterfaceSegment = new LsmppOption("Interface segment", "L=");
-            Options.Add(InterfaceSegment);
-            VdaGeometry = new LsmppOption("Vda geometry", "V=");
-            Options.Add(VdaGeometry);
-            Cal3dInput = new LsmppOption("CAL3D input", "Y=");
-            Options.Add(Cal3dInput);
-            Topaz3dfile = new LsmppOption("TOPAZ3D file", "T=");
-            Options.Add(Topaz3dfile);
-            StressInitialization = new LsmppOption("Stress initialization", "M=");
-            Options.Add(StressInitialization);
-            MappingInputFile = new LsmppOption("Mapping input file", "MAP=");
-            Options.Add(MappingInputFile);
-            Graphics = new LsmppOption("Graphics", "G=", "d3plot");
-            Options.Add(Graphics);
-            TimeHistories = new LsmppOption("Time histories", "F=", "d3thdt");
-            Options.Add(TimeHistories);
-            InterfaceForce = new LsmppOption("Interface force", "S=");
-            Options.Add(InterfaceForce);
-            FsiInterfaceForce = new LsmppOption("FSI interface force", "H=");
-            Options.Add(FsiInterfaceForce);
-            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=", "d3drfl");
-            Options.Add(DynamicRelaxation);
-            AcousticOuput = new LsmppOption("Acoustic Output", "BEM=");
-            Options.Add(AcousticOuput);
-            DemInterfaceForce = new LsmppOption("DEM interface force", "DEM=");
-            Options.Add(DemInterfaceForce);
-            InputEcho = new LsmppOption("Input echo", "E=");
-            Options.Add(InputEcho);
-            RestartDump = new LsmppOption("Restart dump", "D=", "d3dump");
-            Options.Add(RestartDump);
-            InterfaceSegmentSave = new LsmppOption("Interface segment save", "Z=");
-            Options.Add(InterfaceSegmentSave);
-            RemapCrackDatabase = new LsmppOption("Remap, Crack database", "Q=", "remap");
-            Options.Add(RemapCrackDatabase);
-            RunningRestartDump = new LsmppOption("Running restart dump", "A=", "runrsf");
-            Options.Add(RunningRestartDump);
-            PropertyOutput = new LsmppOption("Property output", "D3PROP=", "d3prop");
-            Options.Add(PropertyOutput);
-            MappingOutputFile = new LsmppOption("Mapping output file", "MAP=");
-            Options.Add(MappingOutputFile);
+            Options.Add(AdvancedOptions.AcousticOuput);
+            Options.Add(AdvancedOptions.InterfaceSegment);
+            Options.Add(AdvancedOptions.VdaGeometry);
+            Options.Add(AdvancedOptions.Cal3dInput);
+            Options.Add(AdvancedOptions.Topaz3dfile);
+            Options.Add(AdvancedOptions.StressInitialization);
+            Options.Add(AdvancedOptions.MappingInputFile);
+            Options.Add(AdvancedOptions.Graphics);
+            Options.Add(AdvancedOptions.TimeHistories);
+            Options.Add(AdvancedOptions.InterfaceForce);
+            Options.Add(AdvancedOptions.FsiInterfaceForce);
+            Options.Add(AdvancedOptions.DynamicRelaxation);
+            Options.Add(AdvancedOptions.AcousticOuput);
+            Options.Add(AdvancedOptions.DemInterfaceForce);
+            Options.Add(AdvancedOptions.InputEcho);
+            Options.Add(AdvancedOptions.RestartDump);
+            Options.Add(AdvancedOptions.InterfaceSegmentSave);
+            Options.Add(AdvancedOptions.RemapCrackDatabase);
+            Options.Add(AdvancedOptions.RunningRestartDump);
+            Options.Add(AdvancedOptions.PropertyOutput);
+            Options.Add(AdvancedOptions.MappingOutputFile);
 
             this.WhenAny(
                 x => x.InputFile.Value,
                 x => x.RestartFile.Value,
                 (input, restart) => ToWorkingDir(input.Value, restart.Value)).ToProperty(this, x => x.WorkingDir, out _workingDir);
-
-            this.WhenAnyValue(x => x.OutputFile.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x => File.Create(x));
 
             BrowseInputFile = ReactiveCommand.Create();
             BrowseRestartFile = ReactiveCommand.Create();
@@ -133,6 +107,10 @@ namespace Predictive.Lsdyna.Mpp
             SWPlotState = ReactiveCommand.Create(canRunMPP);
             SWASCIIFlush = ReactiveCommand.Create(canRunMPP);
 
+            Settings.LicenseType.Value = Properties.Settings.Default.LSTC_LICENSE;
+            Settings.LicenseServer.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER;
+            Settings.LicensePort.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT;
+            Settings.LicenseFile.Value = Properties.Settings.Default.LSTC_FILE;
         }
 
         private string ToWorkingDir(string input, string restart)
@@ -160,6 +138,8 @@ namespace Predictive.Lsdyna.Mpp
         public ReactiveCommand<object> SWVisToggle { get; protected set; }
         public ReactiveCommand<object> SWRezonerToggle { get; protected set; }
         public ReactiveCommand<object> SWASCIIFlush { get; protected set; }
+
+        public AdvancedOptionsViewModel AdvancedOptions { get; protected set; }
 
         private LsmppOption _mpiExe; public LsmppOption MpiExe
         {
@@ -228,141 +208,7 @@ namespace Predictive.Lsdyna.Mpp
             get { return _isRunning; }
             set { this.RaiseAndSetIfChanged(ref _isRunning, value); }
         }
-
-        private LsmppOption _interfaceSegment; public LsmppOption InterfaceSegment
-        {
-            get { return _interfaceSegment; }
-            set { this.RaiseAndSetIfChanged(ref _interfaceSegment, value); }
-        }
-        private LsmppOption _vdaGeometry; public LsmppOption VdaGeometry
-        {
-            get { return _vdaGeometry; }
-            set { this.RaiseAndSetIfChanged(ref _vdaGeometry, value); }
-        }
-        private LsmppOption _cal3dInput; public LsmppOption Cal3dInput
-        {
-            get { return _cal3dInput; }
-            set { this.RaiseAndSetIfChanged(ref _cal3dInput, value); }
-        }
-        private LsmppOption _topaz3dfile; public LsmppOption Topaz3dfile
-        {
-            get { return _topaz3dfile; }
-            set { this.RaiseAndSetIfChanged(ref _topaz3dfile, value); }
-        }
-        private LsmppOption _stressInitialization; public LsmppOption StressInitialization
-        {
-            get { return _stressInitialization; }
-            set { this.RaiseAndSetIfChanged(ref _stressInitialization, value); }
-        }
-        private LsmppOption _mappingInputFile; public LsmppOption MappingInputFile
-        {
-            get { return _mappingInputFile; }
-            set { this.RaiseAndSetIfChanged(ref _mappingInputFile, value); }
-        }
-        private LsmppOption _graphics; public LsmppOption Graphics
-        {
-            get { return _graphics; }
-            set { this.RaiseAndSetIfChanged(ref _graphics, value); }
-        }
-        private LsmppOption _timeHistories; public LsmppOption TimeHistories
-        {
-            get { return _timeHistories; }
-            set { this.RaiseAndSetIfChanged(ref _timeHistories, value); }
-        }
-        private LsmppOption _interfaceForce; public LsmppOption InterfaceForce
-        {
-            get { return _interfaceForce; }
-            set { this.RaiseAndSetIfChanged(ref _interfaceForce, value); }
-        }
-        private LsmppOption _fsiInterfaceForce; public LsmppOption FsiInterfaceForce
-        {
-            get { return _fsiInterfaceForce; }
-            set { this.RaiseAndSetIfChanged(ref _fsiInterfaceForce, value); }
-        }
-        private LsmppOption _dynamicRelaxation; public LsmppOption DynamicRelaxation
-        {
-            get { return _dynamicRelaxation; }
-            set { this.RaiseAndSetIfChanged(ref _dynamicRelaxation, value); }
-        }
-        private LsmppOption _acousticOuput; public LsmppOption AcousticOuput
-        {
-            get { return _acousticOuput; }
-            set { this.RaiseAndSetIfChanged(ref _acousticOuput, value); }
-        }
-        private LsmppOption _demInterfaceForce; public LsmppOption DemInterfaceForce
-        {
-            get { return _demInterfaceForce; }
-            set { this.RaiseAndSetIfChanged(ref _demInterfaceForce, value); }
-        }
-        private LsmppOption _inputEcho; public LsmppOption InputEcho
-        {
-            get { return _inputEcho; }
-            set { this.RaiseAndSetIfChanged(ref _inputEcho, value); }
-        }
-        private LsmppOption _restartDump; public LsmppOption RestartDump
-        {
-            get { return _restartDump; }
-            set { this.RaiseAndSetIfChanged(ref _restartDump, value); }
-        }
-        private LsmppOption _interfaceSegmentSave; public LsmppOption InterfaceSegmentSave
-        {
-            get { return _interfaceSegmentSave; }
-            set { this.RaiseAndSetIfChanged(ref _interfaceSegmentSave, value); }
-        }
-        private LsmppOption _remapCrackDatabase; public LsmppOption RemapCrackDatabase
-        {
-            get { return _remapCrackDatabase; }
-            set { this.RaiseAndSetIfChanged(ref _remapCrackDatabase, value); }
-        }
-        private LsmppOption _runningRestartDump; public LsmppOption RunningRestartDump
-        {
-            get { return _runningRestartDump; }
-            set { this.RaiseAndSetIfChanged(ref _runningRestartDump, value); }
-        }
-        private LsmppOption _propertyOutput; public LsmppOption PropertyOutput
-        {
-            get { return _propertyOutput; }
-            set { this.RaiseAndSetIfChanged(ref _propertyOutput, value); }
-        }
-        private LsmppOption _mappingOutputFile; public LsmppOption MappingOutputFile
-        {
-            get { return _mappingOutputFile; }
-            set { this.RaiseAndSetIfChanged(ref _mappingOutputFile, value); }
-        }
-       
-        ObservableAsPropertyHelper<bool> _isNetworkLicense;
-        public bool IsNetworkLicense
-        {
-            get { return _isNetworkLicense.Value; }
-        }
-
-        ObservableAsPropertyHelper<bool> _isLocalLicense;
-        public bool IsLocalLicense
-        {
-            get { return _isLocalLicense.Value; }
-        }
-
-        private LsmppOption _licenseServer; public LsmppOption LicenseServer
-        {
-            get { return _licenseServer; }
-            set { this.RaiseAndSetIfChanged(ref _licenseServer, value); }
-        }
-        private LsmppOption _licensePort; public LsmppOption LicensePort
-        {
-            get { return _licensePort; }
-            set { this.RaiseAndSetIfChanged(ref _licensePort, value); }
-        }
-        private LsmppOption _LicenseFile; public LsmppOption LicenseFile
-        {
-            get { return _LicenseFile; }
-            set { this.RaiseAndSetIfChanged(ref _LicenseFile, value); }
-        }
-        private LsmppOption _licenseType; public LsmppOption LicenseType
-        {
-            get { return _licenseType; }
-            set { this.RaiseAndSetIfChanged(ref _licenseType, value); }
-        }
-
+ 
         ObservableAsPropertyHelper<string> _mppCommand;
         public string mppCommand
         {
@@ -370,27 +216,11 @@ namespace Predictive.Lsdyna.Mpp
             
         }
 
-        //ObservableAsPropertyHelper<string> _mppCommandArgs;
-        //public string mppCommandArgs
-        //{
-        //    get { return _mppCommandArgs.Value; }
-        //}
-
         ObservableAsPropertyHelper<string> _workingDir;
         public string WorkingDir
         {
             get { return _workingDir.Value; }
         }
-
-        //private string MemoryToOption(string memory)
-        //{
-        //    return String.IsNullOrWhiteSpace(memory) ? null : String.Format(" memory={0}", memory);           
-        //}
-
-        //private string ToOption(string input, string flag)
-        //{
-        //    return String.IsNullOrWhiteSpace(input) ? null : String.Format(" '{0}={1}'", flag, input);
-        //}
 
         private SettingsViewModel _settings;
         public SettingsViewModel Settings
