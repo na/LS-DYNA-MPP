@@ -1,6 +1,8 @@
 ﻿using Predictive.StringExtensions;
 using ReactiveUI;
 using System;
+using System.IO;
+using System.Linq;
 using System.Reactive.Linq;
 
 namespace Predictive.Lsdyna.Mpp.Models
@@ -56,6 +58,15 @@ namespace Predictive.Lsdyna.Mpp.Models
 
         public override string ToString()
         {
+            // restart files need special handling b/c with MPP the file is split up into multiple files 
+            // and the solver just wants the base file name, but GetShortPathName doesn't work b/c the file
+            // does not exist. 
+            if (Flag.Equals("R=") && !String.IsNullOrEmpty(Value)) 
+            {
+                var dir = Path.GetDirectoryName(Value);
+                var file = Path.GetFileNameWithoutExtension(Value);
+                return String.Format("{0}{1}\\{2}", Flag, dir.GetShortPathName(), file);
+            }
             return string.IsNullOrEmpty(Value) ? "" : String.Format("{0}{1}", Flag, Value.GetShortPathName());
         }
     }

@@ -101,9 +101,12 @@ namespace Predictive.Lsdyna.Mpp
                     var result = dlg.ShowDialog();
                     if (result == true)
                     {
-                        this.RestartFile.Text = String.Format("{0}\\{1}", dlg.FileName.Directory(), dlg.FileName.FileNameWithoutExtension());
+                        this.RestartFile.Text = dlg.FileName;
                         var output = dlg.FileName.Directory() + "\\d3hsp";
-                        File.Create(output);
+                        if (!File.Exists(output))
+                        {
+                            File.Create(output).Dispose();
+                        }
                         this.OutputFile.Text = output;
                     }
                 });
