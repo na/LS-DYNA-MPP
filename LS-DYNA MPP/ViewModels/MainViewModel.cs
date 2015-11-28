@@ -104,6 +104,10 @@ namespace Predictive.Lsdyna.Mpp
             Settings.LicenseServer.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER;
             Settings.LicensePort.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT;
             Settings.LicenseFile.Value = Properties.Settings.Default.LSTC_FILE;
+
+            this.WhenAnyValue(x => x.RestartFile.Value).Where(x => x.ToLowerInvariant().Contains("full")).Subscribe(_ => this.RestartFile.Flag = "N=");
+            this.WhenAnyValue(x => x.RestartFile.Value).Where(x => x.ToLowerInvariant().Contains("dump")).Subscribe(_ => this.RestartFile.Flag = "R=");
+
         }
 
         private string ToWorkingDir(string input, string restart)
@@ -115,6 +119,12 @@ namespace Predictive.Lsdyna.Mpp
                 return restart.Directory();
             }
             return "";
+        }
+
+        private void SetRestartFlag(string value)
+        {
+            var flag = value.ToLowerInvariant().Contains("full") ? "N=" : "R=";
+            this.RestartFile.Flag = flag;
         }
 
         private ReactiveList<LsmppOption> Options;
