@@ -293,8 +293,7 @@ namespace Predictive.Lsdyna.Mpp
 
         public string AppTitle
         {
-            get {return String.Format("LS-DYNA MPP Program Manager – {0}", RetrieveLinkerTimestamp().ToShortDateString());}
-            //get { return "Hello World"; }
+            get {return String.Format("LS-DYNA® MPP Program Manager – {0}", RetrieveLinkerTimestamp().ToShortDateString());}
         }
     }
 

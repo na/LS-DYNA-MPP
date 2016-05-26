@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LS-DYNA MPP Program Manager")]
+[assembly: AssemblyTitle("LS-DYNA® MPP Program Manager")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Predictive Engineering")]
-[assembly: AssemblyProduct("LS-DYNA MPP Program Manager")]
+[assembly: AssemblyProduct("LS-DYNA® MPP Program Manager")]
 [assembly: AssemblyCopyright("Copyright © Predictive Engineering 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
