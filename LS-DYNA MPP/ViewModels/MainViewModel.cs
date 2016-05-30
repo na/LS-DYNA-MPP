@@ -99,6 +99,7 @@ namespace Predictive.Lsdyna.Mpp
             SWVisToggle = ReactiveCommand.Create(canRunMPP);
             SWPlotState = ReactiveCommand.Create(canRunMPP);
             SWASCIIFlush = ReactiveCommand.Create(canRunMPP);
+            SWStop = ReactiveCommand.Create(canRunMPP);
 
             Settings.LicenseType.Value = Properties.Settings.Default.LSTC_LICENSE;
             Settings.LicenseServer.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER;
@@ -141,6 +142,7 @@ namespace Predictive.Lsdyna.Mpp
         public ReactiveCommand<object> SWVisToggle { get; protected set; }
         public ReactiveCommand<object> SWRezonerToggle { get; protected set; }
         public ReactiveCommand<object> SWASCIIFlush { get; protected set; }
+        public ReactiveCommand<object> SWStop { get; protected set; }
 
         public AdvancedOptionsViewModel AdvancedOptions { get; protected set; }
 

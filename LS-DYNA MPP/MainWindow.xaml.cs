@@ -29,7 +29,7 @@ namespace Predictive.Lsdyna.Mpp
             InitializeComponent();
             ViewModel = new MainViewModel(AdvancedOptions.ViewModel, Settings.ViewModel);
             DataContext = ViewModel;
-
+            
             // Data binding
             this.Bind(ViewModel, vm => vm.InputFile.Value, v => v.InputFile.Text);
             this.Bind(ViewModel, vm => vm.OutputFile.Value, v => v.OutputFile.Text);
@@ -55,6 +55,7 @@ namespace Predictive.Lsdyna.Mpp
             this.BindCommand(ViewModel, vm => vm.SWRezonerToggle, v => v.SWRezonerToggleButton);
             this.BindCommand(ViewModel, vm => vm.SWTimeAndCycle, v => v.SWTimeAndCycleButton);
             this.BindCommand(ViewModel, vm => vm.SWVisToggle, v => v.SWVisToggleButton);
+            this.BindCommand(ViewModel, vm => vm.SWStop, v => v.SWStopButton);
 
             this.Processors.Maximum = Environment.ProcessorCount;
             ViewModel.MpiExe.Value = "mpiexec.exe";
@@ -142,7 +143,6 @@ namespace Predictive.Lsdyna.Mpp
                 .Subscribe(_ => StartCommand());
 
             // Sense Switch Commands
-
             // SW1
             this.WhenAnyObservable(x => x.ViewModel.SWRestartStop)
                 .Subscribe(_ => InsertSenseSwitch("SW1"));
@@ -166,6 +166,12 @@ namespace Predictive.Lsdyna.Mpp
             // SWA
             this.WhenAnyObservable(x => x.ViewModel.SWASCIIFlush)
                 .Subscribe(_ => InsertSenseSwitch("SWA"));
+
+            //stop
+            this.WhenAnyObservable(x => x.ViewModel.SWStop)
+                .Subscribe(_ => InsertSenseSwitch("stop"));
+
+            this.Affinity.IsChecked = true;
         }
 
         public MainViewModel ViewModel
@@ -209,9 +215,9 @@ namespace Predictive.Lsdyna.Mpp
             Debug.Print(line);
         }
 
-        private void InsertSenseSwitch(string sw)
+        private void InsertSenseSwitch(string senseSwitch)
         {
-            File.WriteAllText(String.Format("{0}\\D3KIL", this.ViewModel.WorkingDir), sw);
+            File.WriteAllText(String.Format("{0}\\D3KIL", this.ViewModel.WorkingDir), senseSwitch);
         }
 
         private void ShowAdvancedFlyout(object sender, RoutedEventArgs e)
