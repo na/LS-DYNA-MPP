@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+             xmlns:Controls="clr-namespace:Predictive.Lsdyna.Mpp.Controls" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600"
              Position="Right"
@@ -20,6 +21,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Content="License Type" Margin="6"/>
@@ -29,7 +32,7 @@
         </ComboBox>
         
         <Label Content="Local File" Grid.Row="1" Margin="6"/>
-        <TextBox x:Name="LicenseFile" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" Margin="6" />
+        <Controls:FileBrowseMetroTextBox x:Name="LicenseFile" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" Margin="6" />
         
         <Label Content="License Server" Grid.Row="2" Margin="6"/>
         <TextBox x:Name="LicenseServer" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" Margin="6" controls:TextBoxHelper.Watermark="Localhost or Enter IP"/>
@@ -37,20 +40,32 @@
         <Label Content="Port Number" Grid.Row="3" Margin="6"/>
         <TextBox x:Name="LicensePort" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1" Margin="6" />
 
-        <Label Content="License Manager" Grid.Row="4" Margin="6"/>
-        <UniformGrid Grid.Column="2" Grid.Row="4" Rows="1">
+        <Label Content="LSTC Path" Grid.Row="4" Margin="6"/>
+        <TextBox x:Name="LSTCPath" TextWrapping="Wrap" Grid.Row="4" Grid.Column="1" Margin="6" />
+        
+        
+        <Label Content="License Manager" Grid.Row="5" Margin="6"/>
+        <UniformGrid Grid.Column="2" Grid.Row="5" Rows="1">
+            <Button x:Name="ImportLicenseButton"
+                Content="Import" 
+			    Padding="10,3"
+			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
             <Button x:Name="StartLSTCLMButton"
-			    Content="Start" 
-			    Padding="14,3"
+			    Click="StartLSTCLM"
+                Content="Start" 
+			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
             <Button x:Name="StopLSTCLMButton"
-			    Content="Stop" 
-			    Padding="14,3"
+	            Click="StopLSTCLM"
+                Content="Stop" 
+			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
             <Button x:Name="LaunchLSTCLMButton"
+                Click="LaunchLSTCLM"
 			    Content="Launch" 
-			    Padding="14,3"
+			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
         </UniformGrid>
+        <controls:MetroProgressBar x:Name="ImportProgress" Grid.Row="5" Grid.Column="2" IsIndeterminate="True" Height="6" VerticalAlignment="Top" Foreground="#FFE0E0E0" />
     </Grid>
 </controls:Flyout>

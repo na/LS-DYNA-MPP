@@ -2,11 +2,82 @@ using System;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Predictive.StringExtensions
 {
     public static class StringExtensions
     {
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flag">The flag to use to</param>
+        /// <returns>String</returns>
+        public static string ToWords(this string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return str;
+            }
+            else
+            {
+                int wordSize = 0;
+                wordSize = System.Environment.Is64BitOperatingSystem ? 8 : 4;
+
+                var words = str.Trim();
+                words = words.ToLower();
+                
+                string pattern = "(kib|mib|gib|kb|mb|gb|words)";
+
+                string[] substrings = Regex.Split(words, pattern);
+
+                if (substrings.Length == 1)
+                {
+                    words = str;
+                }
+                else
+                {
+
+                    long value = 0;
+                    Int64.TryParse(substrings[0], out value);
+
+                    string size = substrings[1];
+
+                    switch (size)
+                    {
+                        case "kb":
+                            value = value * 1000 / wordSize;
+                            words = value.ToString();
+                            break;
+                        case "mb":
+                            value = value * 1000 * 1000 / wordSize;
+                            words = value.ToString();
+                            break;
+                        case "gb":
+                            value = value * 1000 * 1000 * 1000 / wordSize;
+                            words = value.ToString();
+                            break;
+                        case "kib":
+                            value = value * 1024 / wordSize;
+                            words = value.ToString();
+                            break;
+                        case "mib":
+                            value = value * 1024 * 1024 / wordSize;
+                            words = value.ToString();
+                            break;
+                        case "gib":
+                            value = value * 1024 * 1024 * 1024 / wordSize;
+                            words = value.ToString();
+                            break;
+                        default:
+                            words = value.ToString();
+                            break;
+                    }
+                }
+                return words;
+            }
+        }
         /// <summary>
         /// Uses System.IO.Path.GetDirectory to get the directory of a string.
         /// </summary>

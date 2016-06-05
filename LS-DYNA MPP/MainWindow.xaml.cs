@@ -9,7 +9,6 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Data;
-//using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
 {
@@ -40,7 +39,8 @@ namespace Predictive.Lsdyna.Mpp
             this.Bind(ViewModel, vm => vm.ExtraMPICommands.Value, v => v.ExtraMPICommands.Text);
             this.Bind(ViewModel, vm => vm.ExtraMPPCommands.Value, v => v.ExtraMPPCommands.Text);
             this.Bind(ViewModel, vm => vm.Affinity.IsActive, v => v.Affinity.IsChecked);
-            this.Bind(ViewModel, vm => vm.Processors.Value, v => v.Processors.Value); 
+            this.Bind(ViewModel, vm => vm.Processors.Value, v => v.Processors.Value);
+            //this.Bind(ViewModel, vm => vm.MemorySize, v => v.MemorySelector.Text);
 
             // Command Binding
             this.BindCommand(ViewModel, vm => vm.BrowseInputFile, v => v.InputFileButton);
@@ -61,14 +61,15 @@ namespace Predictive.Lsdyna.Mpp
             ViewModel.MpiExe.Value = "mpiexec.exe";
             ViewModel.Solver.Value = Properties.Settings.Default.mppPath;
             ViewModel.Processors.Value = Environment.ProcessorCount.ToString();
-            
+            Affinity.IsChecked = Properties.Settings.Default.AFFINITY;
+
             // file dialogs 
             var dlg = new OpenFileDialog();
 
             // The following code wires up the OpenFileDialog boxes for the inputfile, outputfile and solver
             // Subjects for OpenFileDialog Results
-            var inputFilePath = new Subject<string>();
-            var outputFilePath = new Subject<string>();
+            //var inputFilePath = new Subject<string>();
+            //var outputFilePath = new Subject<string>();
             var solverFilePath = new Subject<string>();
 
             // Input File Dialog Box. This calls the OpenFileDialog to allow the user to select an input file, then sets the MainView.inputfile to
@@ -172,6 +173,16 @@ namespace Predictive.Lsdyna.Mpp
                 .Subscribe(_ => InsertSenseSwitch("stop"));
 
             this.Affinity.IsChecked = true;
+            ViewModel.Memory.Value = "8 GB";
+
+            //var errorHandler = UserError.RegisterHandler(error => {
+            //    //ShowErrorDialog(error);
+
+            //    return error.RecoveryCommands
+            //        .Select(x => x.Select(_ => x.RecoveryOptionResult))
+            //        .merge()
+            //        .ObserveOn(RxApp.MainThreadScheduler);
+            //});
         }
 
         public MainViewModel ViewModel
@@ -261,7 +272,7 @@ namespace Predictive.Lsdyna.Mpp
             var lastCommand = Properties.Settings.Default.lastCommand.ToString();
             proc.StartProgram(String.Format("/k {0}", lastCommand), lastWorkingDir);
         }
-
+        
         private void ShowSettings(object sender, RoutedEventArgs e) 
         {
             this.ToggleFlyout(1);
@@ -299,14 +310,14 @@ namespace Predictive.Lsdyna.Mpp
 
         public string AppTitle
         {
-            get {return String.Format("LS-DYNA® MPP Program Manager – {0}", RetrieveLinkerTimestamp().ToShortDateString());}
+            get {return String.Format("LS-DYNA® MPP Program Manager – {0} BETA", RetrieveLinkerTimestamp().ToShortDateString());}
         }
     }
 
     public sealed class ProgramHelper
     {
         private readonly Process _program = new Process();
-        public IObservable<string> ObservableOutput { get; private set; }
+        //public IObservable<string> ObservableOutput { get; private set; }
 
         public ProgramHelper(string programPath)
         {

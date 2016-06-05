@@ -3,8 +3,13 @@ using Predictive.Lsdyna.Mpp.ViewModels;
 using Predictive.StringExtensions;
 using ReactiveUI;
 using System;
+using System.IO;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
+using Microsoft.Win32;
+using System.Reactive;
+using System.Threading.Tasks;
 //using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
@@ -101,14 +106,9 @@ namespace Predictive.Lsdyna.Mpp
             SWASCIIFlush = ReactiveCommand.Create(canRunMPP);
             SWStop = ReactiveCommand.Create(canRunMPP);
 
-            Settings.LicenseType.Value = Properties.Settings.Default.LSTC_LICENSE;
-            Settings.LicenseServer.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER;
-            Settings.LicensePort.Value = Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT;
-            Settings.LicenseFile.Value = Properties.Settings.Default.LSTC_FILE;
-
             this.WhenAnyValue(x => x.RestartFile.Value).Where(x => x.ToLowerInvariant().Contains("full")).Subscribe(_ => this.RestartFile.Flag = "N=");
             this.WhenAnyValue(x => x.RestartFile.Value).Where(x => x.ToLowerInvariant().Contains("dump")).Subscribe(_ => this.RestartFile.Flag = "R=");
-
+            this.WhenAnyValue(x => x.MemorySize).Subscribe(_ => this.Memory.Value = this.Memory.Value + this.MemorySize);
         }
 
         private string ToWorkingDir(string input, string restart)
@@ -127,6 +127,8 @@ namespace Predictive.Lsdyna.Mpp
             var flag = value.ToLowerInvariant().Contains("full") ? "N=" : "R=";
             this.RestartFile.Flag = flag;
         }
+
+        public ObservableCollection<string> MemorySizeOptions { get; private set; }
 
         private ReactiveList<LsmppOption> Options;
 
@@ -212,6 +214,13 @@ namespace Predictive.Lsdyna.Mpp
         {
             get { return _isRunning; }
             set { this.RaiseAndSetIfChanged(ref _isRunning, value); }
+        }
+
+        private string _memorySize;
+        public string MemorySize
+        {
+            get { return _memorySize; }
+            set { this.RaiseAndSetIfChanged(ref _memorySize, value); }
         }
  
         ObservableAsPropertyHelper<string> _mppCommand;

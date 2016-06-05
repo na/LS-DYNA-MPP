@@ -15,21 +15,22 @@ namespace Predictive.Lsdyna.Mpp.ViewModels
             Topaz3dfile = new LsmppOption("TOPAZ3D file", "T=");
             StressInitialization = new LsmppOption("Stress initialization", "M=");
             MappingInputFile = new LsmppOption("Mapping input file", "MAP=");
-            Graphics = new LsmppOption("Graphics", "G=", "d3plot");
-            TimeHistories = new LsmppOption("Time histories", "F=", "d3thdt");
+            Graphics = new LsmppOption("Graphics", "G=");
+            TimeHistories = new LsmppOption("Time histories", "F=");
             InterfaceForce = new LsmppOption("Interface force", "S=");
             FsiInterfaceForce = new LsmppOption("FSI interface force", "H=");
-            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=", "d3drfl");
+            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=");
             DemInterfaceForce = new LsmppOption("DEM interface force", "DEM=");
             InputEcho = new LsmppOption("Input echo", "E=");
-            RestartDump = new LsmppOption("Restart dump", "D=", "d3dump");
+            RestartDump = new LsmppOption("Restart dump", "D=");
             InterfaceSegmentSave = new LsmppOption("Interface segment save", "Z=");
-            RemapCrackDatabase = new LsmppOption("Remap, Crack database", "Q=", "remap");
-            RunningRestartDump = new LsmppOption("Running restart dump", "A=", "runrsf");
-            PropertyOutput = new LsmppOption("Property output", "D3PROP=", "d3prop");
+            RemapCrackDatabase = new LsmppOption("Remap Crack database", "Q=");
+            RunningRestartDump = new LsmppOption("Running restart dump", "A=");
+            PropertyOutput = new LsmppOption("Property output", "D3PROP=");
             MappingOutputFile = new LsmppOption("Mapping output file", "MAP=");
         }
-               
+
+
         private LsmppOption _interfaceSegment;
         public LsmppOption InterfaceSegment
         {

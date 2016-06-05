@@ -23,5 +23,83 @@
     <Setting Name="LSTC_LICENSE_SERVER_PORT" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="LSTC_PATH" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\LSDYNA\</Value>
+    </Setting>
+    <Setting Name="AFFINITY" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Acoustic_output" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Interface_segment" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Vda_geometry" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CAL3D_input" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TOPAZ3D_file" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Stress_initialization" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Mapping_input_file" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Graphics" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d3plot</Value>
+    </Setting>
+    <Setting Name="Time_histories" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d3thdt</Value>
+    </Setting>
+    <Setting Name="Interface_force" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FSI_interface_force" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Dynamic_relaxation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d3drfl</Value>
+    </Setting>
+    <Setting Name="DEM_interface_force" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Input_echo" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Restart_dump" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d3dump</Value>
+    </Setting>
+    <Setting Name="Interface_segment_save" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Remap_Crack_database" Type="System.String" Scope="User">
+      <Value Profile="(Default)">remap</Value>
+    </Setting>
+    <Setting Name="Running_restart_dump" Type="System.String" Scope="User">
+      <Value Profile="(Default)">runrsf</Value>
+    </Setting>
+    <Setting Name="Property_output" Type="System.String" Scope="User">
+      <Value Profile="(Default)">d3prop</Value>
+    </Setting>
+    <Setting Name="Mapping_output_file" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="License_Type" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Local_License_File" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="License_Server" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Network_License_Port" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

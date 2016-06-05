@@ -1,7 +1,14 @@
 ﻿using Predictive.Lsdyna.Mpp.Models;
 using ReactiveUI;
 using System;
+using System.Diagnostics;
+using System.Reactive;
 using System.Reactive.Linq;
+using System.IO;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+using System.Windows;
+using RunProcessAsTask;
 
 namespace Predictive.Lsdyna.Mpp
 {
@@ -9,36 +16,74 @@ namespace Predictive.Lsdyna.Mpp
     {
         public SettingsViewModel()
         {
-            this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense );
+            this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense);
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(0)).ToProperty(this, x => x.IsLocalLicense, out _isLocalLicense);
+            
             LicenseType = new LsmppOption("License Type", "-env lstc_license ");
             LicenseFile = new LsmppOption("Local License File", "-env lstc_file ");
             LicenseServer = new LsmppOption("License Server", "-env lstc_license_server ");
             LicensePort = new LsmppOption("Network License Port", "-env lstc_license_port ");
 
-            this.WhenAnyValue(x => x.LicenseType.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x => 
-            {
-                Properties.Settings.Default.LSTC_LICENSE = x;
-                Properties.Settings.Default.Save(); 
-            });
+            //this.WhenAnyValue(x => x.LicenseType.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x =>
+            //{
+            //    Properties.Settings.Default.LSTC_LICENSE = x;
+            //    Properties.Settings.Default.Save();
+            //});
 
-            this.WhenAnyValue(x => x.LicenseFile.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            //this.WhenAnyValue(x => x.LicenseFile.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            //{
+            //    Properties.Settings.Default.LSTC_FILE = x;
+            //    Properties.Settings.Default.Save();
+            //});
+
+            //this.WhenAnyValue(x => x.LicensePort.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            //{
+            //    Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT = x;
+            //    Properties.Settings.Default.Save();
+            //});
+
+            //this.WhenAnyValue(x => x.LicenseServer.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            //{
+            //    Properties.Settings.Default.LSTC_LICENSE_SERVER = x;
+            //    Properties.Settings.Default.Save();
+            //});
+
+            this.WhenAnyValue(x => x.LSTCPath).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
             {
-                Properties.Settings.Default.LSTC_FILE = x;
+                Properties.Settings.Default.LSTC_PATH = x;
                 Properties.Settings.Default.Save();
             });
 
-            this.WhenAnyValue(x => x.LicensePort.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            StartLSTCLM = ReactiveCommand.Create();
+            StopLSTCLM = ReactiveCommand.Create();
+            LaunchLSTCLM = ReactiveCommand.Create();
+
+            ImportLicense = ReactiveCommand.CreateAsyncTask(async _ => {
+                //await Task.Delay(60);
+                await CopyLicense();
+                });
+
+            ImportLicense.ThrownExceptions.Subscribe(x =>
             {
-                Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT = x;
-                Properties.Settings.Default.Save();
+                MessageBox.Show("Error");
             });
 
-            this.WhenAnyValue(x => x.LicenseServer.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
-            {
-                Properties.Settings.Default.LSTC_LICENSE_SERVER = x;
-                Properties.Settings.Default.Save();
-            });
+            StartLSTCLM.ThrownExceptions.Select(ex => new UserError("Error Starting License Manager", "Check LSTC path")).Subscribe(x => UserError.Throw(x));
+
+            _SpinnerVisibility = ImportLicense.IsExecuting
+                .Select(x => x ? Visibility.Visible : Visibility.Hidden)
+                .ToProperty(this, x => x.SpinnerVisibility, Visibility.Visible);
+        }
+
+        public ReactiveCommand<Unit> ImportLicense { get; set; }
+        public ReactiveCommand<object> StartLSTCLM { get; protected set; }
+        public ReactiveCommand<object> StopLSTCLM { get; protected set; }
+        public ReactiveCommand<object> LaunchLSTCLM { get; protected set; }
+
+        ObservableAsPropertyHelper<Visibility> _SpinnerVisibility;
+        public Visibility SpinnerVisibility
+        {
+            get { return _SpinnerVisibility.Value; }
         }
 
         private int _licenseTypeIndex;
@@ -86,6 +131,65 @@ namespace Predictive.Lsdyna.Mpp
         {
             get { return _licenseType; }
             set { this.RaiseAndSetIfChanged(ref _licenseType, value); }
+        }
+
+        private String _LSTCPath;
+        /// <summary>
+        /// The path to the LS-DYNA® install directory
+        /// </summary>
+        public String LSTCPath
+        {
+            get { return _LSTCPath; }
+            set { this.RaiseAndSetIfChanged(ref _LSTCPath, value); }
+        }
+
+
+        /// <summary>
+        /// Task CopyLicense displays a select file dialog and then copies the selected file to 'server_data' in the program folder of <see cref="LSTCPath">LSTCPath</see>.
+        /// </summary>
+        public async Task CopyLicense()
+        {
+            var dlg = new OpenFileDialog();
+            string destination = this.LSTCPath + "program\\server_data";
+            var result = dlg.ShowDialog();
+
+            if (result == true)
+            {
+                await CopyFileAsync(dlg.FileName, destination);
+            }
+        }
+
+        /// <summary>
+        /// Async task to copy a file from source to destination 
+        /// file to LSTC_PATH\program\server_data
+        /// </summary>
+        /// <param name="source">The file to copy</param>
+        /// <param name="destination">The path of the new file</param>
+        /// <returns></returns>
+        public async Task CopyFileAsync(string source, string destination)
+        {
+            using (FileStream SourceStream = File.Open(source, FileMode.Open))
+            {
+                using (FileStream DestinationStream = File.Create(destination))
+                {
+                    await SourceStream.CopyToAsync(DestinationStream);
+                }
+            }
+        }
+
+
+        public async Task<ProcessResults> LstcLM(string command)
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = LSTCPath + "program\\lstclm.exe",
+                Arguments = command,
+                Verb = "runas",
+            };
+
+            var processResults = await ProcessEx.RunAsync(processStartInfo);
+
+            return processResults;
         }
     }
 }
