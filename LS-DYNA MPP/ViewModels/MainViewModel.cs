@@ -3,13 +3,9 @@ using Predictive.Lsdyna.Mpp.ViewModels;
 using Predictive.StringExtensions;
 using ReactiveUI;
 using System;
-using System.IO;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
-using Microsoft.Win32;
-using System.Reactive;
-using System.Threading.Tasks;
 //using Predictive.ProcessExtensions;
 
 namespace Predictive.Lsdyna.Mpp
