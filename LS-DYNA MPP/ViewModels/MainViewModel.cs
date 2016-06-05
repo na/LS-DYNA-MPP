@@ -14,7 +14,7 @@ namespace Predictive.Lsdyna.Mpp
     {
         public MainViewModel(AdvancedOptionsViewModel AdvancedOptions, SettingsViewModel Settings)
         {
-            
+            // Master list of command line options this is a reactive list so we can track changes and build the command
             Options = new ReactiveList<LsmppOption>() { ChangeTrackingEnabled = true };
             
             // Track changes to options and when an option value changes set it to active
@@ -74,6 +74,7 @@ namespace Predictive.Lsdyna.Mpp
             Options.Add(AdvancedOptions.PropertyOutput);
             Options.Add(AdvancedOptions.MappingOutputFile);
 
+            // Set the working directory when the user selects an input or restart file
             this.WhenAny(
                 x => x.InputFile.Value,
                 x => x.RestartFile.Value,
@@ -123,8 +124,6 @@ namespace Predictive.Lsdyna.Mpp
             var flag = value.ToLowerInvariant().Contains("full") ? "N=" : "R=";
             this.RestartFile.Flag = flag;
         }
-
-        public ObservableCollection<string> MemorySizeOptions { get; private set; }
 
         private ReactiveList<LsmppOption> Options;
 
@@ -237,18 +236,6 @@ namespace Predictive.Lsdyna.Mpp
         {
             get { return _settings; }
             set { this.RaiseAndSetIfChanged(ref _settings, value); }
-        }
-
-        private string RestartToOption(string restart)
-        {
-            if (!string.IsNullOrEmpty(restart))
-            {
-                var flag = restart.ToLowerInvariant().Contains("full") ? "N" : "R";
-                return String.Format(" {0}={1}", flag, string.Format("{0}\\{1}", restart.Directory().GetShortPathName(), restart.FileNameWithoutExtension()));
-            } else
-            {
-                return null;
-            }
         }
 
         public override string ToString()
