@@ -51,12 +51,10 @@
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
             <Button x:Name="StartLSTCLMButton"
-			    Click="StartLSTCLM"
                 Content="Start" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
             <Button x:Name="StopLSTCLMButton"
-	            Click="StopLSTCLM"
                 Content="Stop" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />

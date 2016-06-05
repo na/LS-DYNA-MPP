@@ -14,6 +14,8 @@ namespace Predictive.Lsdyna.Mpp
 {
     public class SettingsViewModel : ReactiveObject
     {
+        const string licenseFileFilter = "License File (*lstc_file*, *server_data*, *lstc.*)| *lstc_file*;*server_data*;*lstc.*";
+
         public SettingsViewModel()
         {
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense);
@@ -24,29 +26,29 @@ namespace Predictive.Lsdyna.Mpp
             LicenseServer = new LsmppOption("License Server", "-env lstc_license_server ");
             LicensePort = new LsmppOption("Network License Port", "-env lstc_license_port ");
 
-            //this.WhenAnyValue(x => x.LicenseType.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x =>
-            //{
-            //    Properties.Settings.Default.LSTC_LICENSE = x;
-            //    Properties.Settings.Default.Save();
-            //});
+            this.WhenAnyValue(x => x.LicenseType.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Subscribe(x =>
+            {
+                Properties.Settings.Default.LSTC_LICENSE = x;
+                Properties.Settings.Default.Save();
+            });
 
-            //this.WhenAnyValue(x => x.LicenseFile.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
-            //{
-            //    Properties.Settings.Default.LSTC_FILE = x;
-            //    Properties.Settings.Default.Save();
-            //});
+            this.WhenAnyValue(x => x.LicenseFile.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            {
+                Properties.Settings.Default.LSTC_FILE = x;
+                Properties.Settings.Default.Save();
+            });
 
-            //this.WhenAnyValue(x => x.LicensePort.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
-            //{
-            //    Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT = x;
-            //    Properties.Settings.Default.Save();
-            //});
+            this.WhenAnyValue(x => x.LicensePort.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            {
+                Properties.Settings.Default.LSTC_LICENSE_SERVER_PORT = x;
+                Properties.Settings.Default.Save();
+            });
 
-            //this.WhenAnyValue(x => x.LicenseServer.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
-            //{
-            //    Properties.Settings.Default.LSTC_LICENSE_SERVER = x;
-            //    Properties.Settings.Default.Save();
-            //});
+            this.WhenAnyValue(x => x.LicenseServer.Value).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
+            {
+                Properties.Settings.Default.LSTC_LICENSE_SERVER = x;
+                Properties.Settings.Default.Save();
+            });
 
             this.WhenAnyValue(x => x.LSTCPath).Where(x => !String.IsNullOrWhiteSpace(x)).Throttle(TimeSpan.FromSeconds(3)).Subscribe(x =>
             {
@@ -54,8 +56,8 @@ namespace Predictive.Lsdyna.Mpp
                 Properties.Settings.Default.Save();
             });
 
-            StartLSTCLM = ReactiveCommand.Create();
-            StopLSTCLM = ReactiveCommand.Create();
+            //StartLSTCLM = ReactiveCommand.Create();
+            //StopLSTCLM = ReactiveCommand.Create();
             LaunchLSTCLM = ReactiveCommand.Create();
 
             ImportLicense = ReactiveCommand.CreateAsyncTask(async _ => {
@@ -63,10 +65,13 @@ namespace Predictive.Lsdyna.Mpp
                 await CopyLicense();
                 });
 
-            ImportLicense.ThrownExceptions.Subscribe(x =>
+            ImportLicense.ThrownExceptions.Subscribe(ex =>
             {
                 MessageBox.Show("Error");
             });
+
+            StartLSTCLM = ReactiveCommand.CreateAsyncTask(_ => LstcLM("start"));
+            StopLSTCLM = ReactiveCommand.CreateAsyncTask(_ => LstcLM("stop"));
 
             StartLSTCLM.ThrownExceptions.Select(ex => new UserError("Error Starting License Manager", "Check LSTC path")).Subscribe(x => UserError.Throw(x));
 
@@ -76,9 +81,10 @@ namespace Predictive.Lsdyna.Mpp
         }
 
         public ReactiveCommand<Unit> ImportLicense { get; set; }
-        public ReactiveCommand<object> StartLSTCLM { get; protected set; }
-        public ReactiveCommand<object> StopLSTCLM { get; protected set; }
+        public ReactiveCommand<bool> StartLSTCLM { get; protected set; }
+        public ReactiveCommand<bool> StopLSTCLM { get; protected set; }
         public ReactiveCommand<object> LaunchLSTCLM { get; protected set; }
+        public ReactiveCommand<Unit> RestartLM { get; protected set; }
 
         ObservableAsPropertyHelper<Visibility> _SpinnerVisibility;
         public Visibility SpinnerVisibility
@@ -178,18 +184,62 @@ namespace Predictive.Lsdyna.Mpp
         }
 
 
-        public async Task<ProcessResults> LstcLM(string command)
+        public async Task<bool> LstcLM(string action)
         {
-            var processStartInfo = new ProcessStartInfo
+            if (action.Equals("restart"))
             {
-                FileName = LSTCPath + "program\\lstclm.exe",
-                Arguments = command,
-                Verb = "runas",
-            };
+                await StopLSTCLM.ExecuteAsync();
+                await StartLSTCLM.ExecuteAsync();
+                return await Task.FromResult<bool>(true);
+            }
+            else
+            {
+                // there is no non-generic TaskCompletionSource
+                var tcs = new TaskCompletionSource<bool>();
 
-            var processResults = await ProcessEx.RunAsync(processStartInfo);
+                var process = new Process
+                {
+                    StartInfo = {
+                    FileName = "cmd.exe",
+                    UseShellExecute = true,
+                    Verb = "runas",
+                    Arguments = string.Format("/k {0}program\\lstclm.exe {1}", LSTCPath, action)
+                },
+                    EnableRaisingEvents = true
+                };
 
-            return processResults;
+                process.Exited += (sender, args) =>
+                {
+                    tcs.SetResult(true);
+                    process.Dispose();
+                };
+
+                process.Start();
+
+                return await tcs.Task;
+            }
         }
+
+        //static Task RunProcessAsync(string fileName)
+        //{
+        //    // there is no non-generic TaskCompletionSource
+        //    var tcs = new TaskCompletionSource<bool>();
+
+        //    var process = new Process
+        //    {
+        //        StartInfo = { FileName = fileName },
+        //        EnableRaisingEvents = true
+        //    };
+
+        //    process.Exited += (sender, args) =>
+        //    {
+        //        tcs.SetResult(true);
+        //        process.Dispose();
+        //    };
+
+        //    process.Start();
+
+        //    return tcs.Task;
+        //}
     }
 }
