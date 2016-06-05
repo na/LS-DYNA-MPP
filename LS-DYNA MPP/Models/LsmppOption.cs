@@ -61,11 +61,15 @@ namespace Predictive.Lsdyna.Mpp.Models
             // restart files need special handling b/c with MPP the file is split up into multiple files 
             // and the solver just wants the base file name, but GetShortPathName doesn't work b/c the file
             // does not exist. 
-            if ((Flag.Equals("R=") || Flag.Equals("O=")) && !String.IsNullOrEmpty(Value)) 
+            if ((Flag.Equals("R=") || Flag.Equals("O=")) && !String.IsNullOrEmpty(Value))
             {
                 var dir = Path.GetDirectoryName(Value);
                 var file = Path.GetFileNameWithoutExtension(Value);
                 return String.Format("{0}{1}\\{2}", Flag, dir.GetShortPathName(), file);
+            }
+            else if ((Flag.Equals("Memory=") || Flag.Equals("Memory2=")) && !String.IsNullOrEmpty(Value))
+            {
+                return String.Format("{0}{1}", Flag, Value.ToWords());
             }
             return string.IsNullOrEmpty(Value) ? "" : String.Format("{0}{1}", Flag, Value.GetShortPathName());
         }
