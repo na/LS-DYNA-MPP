@@ -20,7 +20,7 @@ namespace Predictive.Lsdyna.Mpp
         {
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(1)).ToProperty(this, x => x.IsNetworkLicense, out _isNetworkLicense);
             this.WhenAnyValue(x => x.LicenseTypeIndex).Select(x => x.Equals(0)).ToProperty(this, x => x.IsLocalLicense, out _isLocalLicense);
-            
+
             LicenseType = new LsmppOption("License Type", "-env lstc_license ");
             LicenseFile = new LsmppOption("Local License File", "-env lstc_file ");
             LicenseServer = new LsmppOption("License Server", "-env lstc_license_server ");
@@ -75,6 +75,22 @@ namespace Predictive.Lsdyna.Mpp
             _SpinnerVisibility = ImportLicense.IsExecuting
                 .Select(x => x ? Visibility.Visible : Visibility.Hidden)
                 .ToProperty(this, x => x.SpinnerVisibility, Visibility.Visible);
+
+            this.WhenAnyValue(x => x.LicenseTypeIndex).Subscribe(x =>
+            {
+                if (x.Equals(0))
+                {
+                    this.LicenseFile.IsActive = true;
+                    this.LicensePort.IsActive = false;
+                    this.LicenseServer.IsActive = false;
+                }
+                else
+                {
+                    this.LicenseFile.IsActive = false;
+                    this.LicensePort.IsActive = true;
+                    this.LicenseServer.IsActive = true;
+                }
+            });
         }
 
         public ReactiveCommand<Unit> ImportLicense { get; set; }
