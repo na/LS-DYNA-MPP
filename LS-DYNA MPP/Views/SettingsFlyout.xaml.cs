@@ -43,9 +43,9 @@ namespace Predictive.Lsdyna.Mpp.Views
 
             // Bind commands to buttons
             this.BindCommand(ViewModel, vm => vm.ImportLicense, v => v.ImportLicenseButton);
-            this.BindCommand(ViewModel, vm => vm.StartLSTCLM, v => v.StartLSTCLMButton);
-            this.BindCommand(ViewModel, vm => vm.StopLSTCLM, v => v.StopLSTCLMButton);
-            this.BindCommand(ViewModel, vm => vm.LaunchLSTCLM, v => v.LaunchLSTCLMButton);
+            this.BindCommand(ViewModel, vm => vm.StartLicenseManager, v => v.StartLicenseManagerButton);
+            this.BindCommand(ViewModel, vm => vm.StopLicenseManager, v => v.StopLicenseManagerButton);
+            this.BindCommand(ViewModel, vm => vm.LaunchLicenseManager, v => v.LaunchLicenseManagerButton);
         }
 
         public SettingsViewModel ViewModel
@@ -62,47 +62,5 @@ namespace Predictive.Lsdyna.Mpp.Views
             get { return ViewModel; }
             set { ViewModel = (SettingsViewModel)value; }
         }
-
-        //// TODO: Make this a ReactiveCOMMAND and add proper error handling
-        //private void StartLSTCLM(object sender, RoutedEventArgs e)
-        //{
-        //    LstcLM("start");
-        //}
-
-        //private void StopLSTCLM(object sender, RoutedEventArgs e)
-        //{
-        //    LstcLM("stop");
-        //}
-
-        private void LaunchLSTCLM(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Process.Start(string.Format("{0}program\\lstclmui.exe", LSTCPath.Text));
-            }
-            catch (Win32Exception ex)
-            {
-                MessageBox.Show(string.Format("Cannot find {0}program\\lstclmui.exe. Please make sure LSTC Path is set to the install directory of LS-DYNA.", LSTCPath.Text), "Error starting LSTC License Manager", MessageBoxButton.OK);
-            }
-        }
-
-        private void LstcLM(string action)
-        {
-            Process process = new Process();
-            try
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.UseShellExecute = true;
-                startInfo.Verb = "runas";
-                startInfo.FileName = "cmd.exe";
-                startInfo.Arguments = string.Format("/k {0}program\\lstclm.exe {1}", LSTCPath.Text, action);
-                Process.Start(startInfo);
-            }
-            catch (Win32Exception ex)
-            {
-                MessageBox.Show(string.Format("Cannot find {0}program\\lstclm.exe. Please make sure LSTC Path is set to the install directory of LS-DYNA.", LSTCPath.Text), "Error starting LSTC License Manager", MessageBoxButton.OK);
-            }
-        }
-
     }
 }

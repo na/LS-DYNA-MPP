@@ -50,16 +50,15 @@
                 Content="Import" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
-            <Button x:Name="StartLSTCLMButton"
+            <Button x:Name="StartLicenseManagerButton"
                 Content="Start" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
-            <Button x:Name="StopLSTCLMButton"
+            <Button x:Name="StopLicenseManagerButton"
                 Content="Stop" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
-            <Button x:Name="LaunchLSTCLMButton"
-                Click="LaunchLSTCLM"
+            <Button x:Name="LaunchLicenseManagerButton"
 			    Content="Launch" 
 			    Padding="10,3"
 			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
