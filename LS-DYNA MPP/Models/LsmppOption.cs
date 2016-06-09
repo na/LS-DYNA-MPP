@@ -44,12 +44,12 @@ namespace Predictive.Lsdyna.Mpp.Models
             set { this.RaiseAndSetIfChanged(ref _isActive, value); }
         }
 
-        public LsmppOption(string name, string flag, string option ="", string helpText="", bool isActive=false)
+        public LsmppOption(string name, string flag, string value ="", string helpText="", bool isActive=false)
         {
             Flag = flag;
             Name = name;
             HelpText = helpText;
-            Value = option;
+            Value = value;
             IsActive = isActive;
 
             // If the Option gets set to empty or whitespace set IsActive to false

@@ -49,19 +49,47 @@
             <Button x:Name="ImportLicenseButton"
                 Content="Import" 
 			    Padding="10,3"
-			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
+			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"><Run Text="Import License"/></TextBlock>
+                        <TextBlock>Copies the selected file to the program folder of the specified LSTC Path as <Italic>server_data</Italic>.</TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
             <Button x:Name="StartLicenseManagerButton"
                 Content="Start" 
 			    Padding="10,3"
-			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
+			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6">
+            <Button.ToolTip>
+                <StackPanel>
+                    <TextBlock FontWeight="Bold"><Run Text="Start License Manager"/></TextBlock>
+                    <TextBlock>Runs <Italic>lstclm.exe start</Italic></TextBlock>
+                </StackPanel>
+            </Button.ToolTip>
+            </Button>
             <Button x:Name="StopLicenseManagerButton"
                 Content="Stop" 
 			    Padding="10,3"
-			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
+			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"><Run Text="Stop License Manager"/></TextBlock>
+                        <TextBlock>Runs <Italic>lstclm.exe stop</Italic></TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
             <Button x:Name="LaunchLicenseManagerButton"
 			    Content="Launch" 
 			    Padding="10,3"
-			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6" />
+			    Style="{DynamicResource AccentedSquareButtonStyle}" Margin="6">
+                <Button.ToolTip>
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold"><Run Text="Launch License Manager"/></TextBlock>
+                        <TextBlock>Start <Italic>lstclmui.exe</Italic></TextBlock>
+                    </StackPanel>
+                </Button.ToolTip>
+            </Button>
         </UniformGrid>
         <controls:MetroProgressBar x:Name="ImportProgress" Grid.Row="5" Grid.Column="2" IsIndeterminate="True" Height="6" VerticalAlignment="Top" Foreground="#FFE0E0E0" />
     </Grid>

@@ -26,7 +26,7 @@
     <Setting Name="LSTC_PATH" Type="System.String" Scope="User">
       <Value Profile="(Default)">C:\LSDYNA\</Value>
     </Setting>
-    <Setting Name="AFFINITY" Type="System.Boolean" Scope="User">
+    <Setting Name="AFFINITY_IsChecked" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Acoustic_output" Type="System.String" Scope="User">
@@ -129,6 +129,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Restart_File" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Affinity" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

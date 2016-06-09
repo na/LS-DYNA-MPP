@@ -122,12 +122,12 @@ namespace Predictive.Lsdyna.Mpp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AFFINITY {
+        public bool AFFINITY_IsChecked {
             get {
-                return ((bool)(this["AFFINITY"]));
+                return ((bool)(this["AFFINITY_IsChecked"]));
             }
             set {
-                this["AFFINITY"] = value;
+                this["AFFINITY_IsChecked"] = value;
             }
         }
         
@@ -416,6 +416,138 @@ namespace Predictive.Lsdyna.Mpp.Properties {
             }
             set {
                 this["Network_License_Port"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MPI_EXE {
+            get {
+                return ((string)(this["MPI_EXE"]));
+            }
+            set {
+                this["MPI_EXE"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Processors {
+            get {
+                return ((string)(this["Processors"]));
+            }
+            set {
+                this["Processors"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Extra_MPI_commands {
+            get {
+                return ((string)(this["Extra_MPI_commands"]));
+            }
+            set {
+                this["Extra_MPI_commands"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Extra_MPP_commands {
+            get {
+                return ((string)(this["Extra_MPP_commands"]));
+            }
+            set {
+                this["Extra_MPP_commands"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Solver {
+            get {
+                return ((string)(this["Solver"]));
+            }
+            set {
+                this["Solver"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Output_File {
+            get {
+                return ((string)(this["Output_File"]));
+            }
+            set {
+                this["Output_File"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Input_File {
+            get {
+                return ((string)(this["Input_File"]));
+            }
+            set {
+                this["Input_File"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8 GB")]
+        public string Memory {
+            get {
+                return ((string)(this["Memory"]));
+            }
+            set {
+                this["Memory"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Memory2 {
+            get {
+                return ((string)(this["Memory2"]));
+            }
+            set {
+                this["Memory2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Restart_File {
+            get {
+                return ((string)(this["Restart_File"]));
+            }
+            set {
+                this["Restart_File"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Affinity {
+            get {
+                return ((string)(this["Affinity"]));
+            }
+            set {
+                this["Affinity"] = value;
             }
         }
     }

@@ -42,7 +42,7 @@ namespace Predictive.Lsdyna.Mpp
             Options.Add(InputFile);
             RestartFile = new LsmppOption("Restart File", "R=");
             Options.Add(RestartFile);
-            OutputFile = new LsmppOption("OutputFile", "O=");
+            OutputFile = new LsmppOption("Output File", "O=");
             Options.Add(OutputFile);
             Memory = new LsmppOption("Memory", "Memory=");
             Options.Add(Memory);

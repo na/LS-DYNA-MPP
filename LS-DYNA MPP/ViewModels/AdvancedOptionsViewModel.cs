@@ -19,14 +19,14 @@ namespace Predictive.Lsdyna.Mpp.ViewModels
             TimeHistories = new LsmppOption("Time histories", "F=");
             InterfaceForce = new LsmppOption("Interface force", "S=");
             FsiInterfaceForce = new LsmppOption("FSI interface force", "H=");
-            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=");
+            DynamicRelaxation = new LsmppOption("Dynamic relaxation", "B=", "d3drfl");
             DemInterfaceForce = new LsmppOption("DEM interface force", "DEM=");
             InputEcho = new LsmppOption("Input echo", "E=");
-            RestartDump = new LsmppOption("Restart dump", "D=");
+            RestartDump = new LsmppOption("Restart dump", "D=", "d3dump");
             InterfaceSegmentSave = new LsmppOption("Interface segment save", "Z=");
-            RemapCrackDatabase = new LsmppOption("Remap Crack database", "Q=");
-            RunningRestartDump = new LsmppOption("Running restart dump", "A=");
-            PropertyOutput = new LsmppOption("Property output", "D3PROP=");
+            RemapCrackDatabase = new LsmppOption("Remap Crack database", "Q=", "remap");
+            RunningRestartDump = new LsmppOption("Running restart dump", "A=", "runrsf");
+            PropertyOutput = new LsmppOption("Property output", "D3PROP=", "d3prop");
             MappingOutputFile = new LsmppOption("Mapping output file", "MAP=");
         }
 

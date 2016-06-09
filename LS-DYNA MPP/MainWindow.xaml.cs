@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Microsoft.Win32;
 using Predictive.StringExtensions;
 using ReactiveUI;
@@ -6,6 +7,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Data;
@@ -59,9 +61,15 @@ namespace Predictive.Lsdyna.Mpp
 
             this.Processors.Maximum = Environment.ProcessorCount;
             ViewModel.MpiExe.Value = "mpiexec.exe";
+           
+            // Load saved settings
             ViewModel.Solver.Value = Properties.Settings.Default.mppPath;
             ViewModel.Processors.Value = Environment.ProcessorCount.ToString();
-            Affinity.IsChecked = Properties.Settings.Default.AFFINITY;
+            Affinity.IsChecked = Properties.Settings.Default.AFFINITY_IsChecked;
+            ViewModel.Memory.Value = Properties.Settings.Default.Memory.ToString();
+            ViewModel.Memory2.Value = Properties.Settings.Default.Memory2.ToString();
+            ViewModel.ExtraMPICommands.Value = Properties.Settings.Default.Extra_MPI_commands.ToString();
+            ViewModel.ExtraMPPCommands.Value = Properties.Settings.Default.Extra_MPP_commands.ToString();
 
             // file dialogs 
             var dlg = new OpenFileDialog();
@@ -172,9 +180,6 @@ namespace Predictive.Lsdyna.Mpp
             this.WhenAnyObservable(x => x.ViewModel.SWStop)
                 .Subscribe(_ => InsertSenseSwitch("stop"));
 
-            this.Affinity.IsChecked = true;
-            ViewModel.Memory.Value = "8 GB";
-
             //var errorHandler = UserError.RegisterHandler(error => {
             //    //ShowErrorDialog(error);
 
@@ -183,6 +188,13 @@ namespace Predictive.Lsdyna.Mpp
             //        .merge()
             //        .ObserveOn(RxApp.MainThreadScheduler);
             //});
+
+            UserError.RegisterHandler(err => {
+                ShowMessage("Check LSTC Path", err.ErrorMessage);
+
+                // This is what the ViewModel should do in response to the user's decision
+                return Observable.Return(RecoveryOptionResult.CancelOperation);
+            });
         }
 
         public MainViewModel ViewModel
@@ -312,6 +324,10 @@ namespace Predictive.Lsdyna.Mpp
         {
             get {return String.Format("LS-DYNA® MPP Program Manager – {0} BETA", RetrieveLinkerTimestamp().ToShortDateString());}
         }
+
+        private async void ShowMessage(string title, string message) {
+            await this.ShowMessageAsync(title, message);
+        }
     }
 
     public sealed class ProgramHelper
@@ -348,4 +364,6 @@ namespace Predictive.Lsdyna.Mpp
             return value.ToString().GetLongPathName();
         }
     }
+
+
 }

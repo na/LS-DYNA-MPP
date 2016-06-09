@@ -70,7 +70,13 @@ namespace Predictive.Lsdyna.Mpp
             StopLicenseManager = ReactiveCommand.CreateAsyncTask(_ => LstcLicenseManager("stop"));
             LaunchLicenseManager = ReactiveCommand.CreateAsyncTask(_ => LstcLicenseManager("launch"));
 
-            StartLicenseManager.ThrownExceptions.Select(ex => new UserError("Error Starting License Manager", "Check LSTC path")).Subscribe(x => UserError.Throw(x));
+            StartLicenseManager.ThrownExceptions.Subscribe(ex => MessageBox.Show("Check LSTC Path","Error Starting License Manager"));
+            StopLicenseManager.ThrownExceptions.Subscribe(ex => MessageBox.Show("Check LSTC Path", "Error Stoping License Manager"));
+            //LaunchLicenseManager.ThrownExceptions.Subscribe(ex => MessageBox.Show("lstclmui.exe not found. Check LSTC Path.", "Error Launching License Manager"));
+            LaunchLicenseManager.ThrownExceptions
+                .Select(ex => new UserError("lstclmui.exe not found. Check LSTC Path setting.","Check LSTC Path"))
+                .SelectMany(UserError.Throw)
+                .Subscribe();
 
             _SpinnerVisibility = ImportLicense.IsExecuting
                 .Select(x => x ? Visibility.Visible : Visibility.Hidden)
